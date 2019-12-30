@@ -1,0 +1,37 @@
+{
+    "name": "syrma/config-generator",
+    "description": "Tool for config management",
+    "type": "project",
+    "require": {
+        "php": "^7.2",
+        "ocramius/package-versions": "^1.4",
+        "symfony/yaml": "3.4.*|4.4.*",
+        "symfony/templating": "3.4.*|4.4.*",
+        "symfony/dependency-injection": "3.4.*|4.4.*",
+        "symfony/config": "3.4.*|4.4.*",
+        "symfony/filesystem": "3.4.*|4.4.*",
+        "symfony/console": "3.4.*|4.4.*",
+        "webmozart/assert": "1.*",
+        "webmozart/path-util": "2.*"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-master"        ,
+        "phpunit/phpunit": "^7.5",
+        "friendsofphp/php-cs-fixer": "2.*",
+        "php-cs-fixer/phpunit-constraint-isidenticalstring": "1.*",
+        "php-cs-fixer/phpunit-constraint-xmlmatchesxsd": "1.*"
+    },
+    "license": "GPL3",
+    "authors": [
+        {
+            "name": "Tamas Szijarto",
+            "email": "szijarto.tamas.developer@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+      "psr-4": {
+        "Syrma\\ConfigGenerator\\": "src"
+      }
+    }
+}
