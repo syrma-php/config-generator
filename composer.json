@@ -41,5 +41,8 @@
         "psr-4": {
             "Syrma\\ConfigGenerator\\Tests\\": "tests/"
         }
+    },
+    "scripts": {
+        "test": "phpunit"
     }
 }
