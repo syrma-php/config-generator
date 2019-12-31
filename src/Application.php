@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Syrma\ConfigGenerator;
 
-use PackageVersions\Versions;
 use function array_keys;
+use PackageVersions\Versions;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Application as SfApplication;
 use Symfony\Component\Console\Command\Command;
@@ -51,7 +51,7 @@ LOGO;
 
     public function getHelp()
     {
-        return self::LOGO . parent::getHelp();
+        return self::LOGO.parent::getHelp();
     }
 
     protected function getDefaultCommands()
@@ -69,7 +69,6 @@ LOGO;
         return $commands;
     }
 
-
     private function createContainer(): TaggedContainerInterface
     {
         $containerBuilder = new ContainerBuilder();
@@ -80,13 +79,11 @@ LOGO;
         return $containerBuilder;
     }
 
-    /**
-     * @return string
-     */
     private function guessVersion(): string
     {
         $rawVersion = Versions::getVersion('syrma/config-generator');
         [$prettyVersion, $commitHash] = explode('@', $rawVersion);
-        return $prettyVersion . '@' . substr($commitHash, 0, 7);
+
+        return $prettyVersion.'@'.substr($commitHash, 0, 7);
     }
 }

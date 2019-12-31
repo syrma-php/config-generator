@@ -5,8 +5,7 @@ declare(strict_types=1);
 
 use Syrma\ConfigGenerator\Application;
 
-
-(static function(){
+(static function () {
     $file = null;
     foreach ([__DIR__.'/../../autoload.php', __DIR__.'/../autoload.php', __DIR__.'/../vendor/autoload.php'] as $possibleFile) {
         if (file_exists($possibleFile)) {

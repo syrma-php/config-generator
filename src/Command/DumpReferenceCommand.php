@@ -23,7 +23,7 @@ class DumpReferenceCommand extends Command
         $dumper = new YamlReferenceDumper();
         $config = new ConfigDefinition();
 
-        foreach( $config->getConfigTreeBuilder()->buildTree()->getChildren()  as $child){
+        foreach ($config->getConfigTreeBuilder()->buildTree()->getChildren()  as $child) {
             $output->writeln($dumper->dumpNode($child));
         }
     }

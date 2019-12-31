@@ -35,10 +35,9 @@ class ConfigDefinition implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('config-generator');
 
-        if( method_exists($treeBuilder,'root')){
+        if (method_exists($treeBuilder, 'root')) {
             $rootNode = $treeBuilder->root('config-generator');
-        }
-        else{
+        } else {
             $rootNode = $treeBuilder->getRootNode();
         }
 
@@ -47,7 +46,6 @@ class ConfigDefinition implements ConfigurationInterface
 
         return $treeBuilder;
     }
-
 
     private function addDefaultSection(ArrayNodeDefinition $root): void
     {
