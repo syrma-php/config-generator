@@ -21,7 +21,6 @@
         "phpunit/php-invoker": "^2.0",
         "friendsofphp/php-cs-fixer": "2.*",
         "php-cs-fixer/phpunit-constraint-isidenticalstring": "1.*",
-        "php-cs-fixer/phpunit-constraint-xmlmatchesxsd": "1.*",
         "symfony/phpunit-bridge": "3.4.*||4.4.*"
     },
     "license": "GPL3",
