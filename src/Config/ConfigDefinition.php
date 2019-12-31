@@ -35,14 +35,19 @@ class ConfigDefinition implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('config-generator');
 
-        $this->addDefaultSection($treeBuilder->getRootNode());
-        $this->addDefinitionSection($treeBuilder->getRootNode());
+        if( method_exists($treeBuilder,'root')){
+            $rootNode = $treeBuilder->root('config-generator');
+        }
+        else{
+            $rootNode = $treeBuilder->getRootNode();
+        }
+
+        $this->addDefaultSection($rootNode);
+        $this->addDefinitionSection($rootNode);
 
         return $treeBuilder;
     }
 
-    // @TODO - Relative hivatkozásokat kidobni
-    // @TODO - paraméter hivatkozásokat kiszervzni
 
     private function addDefaultSection(ArrayNodeDefinition $root): void
     {
