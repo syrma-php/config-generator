@@ -16,7 +16,7 @@ jobs:
         php-version: '7.2'
       
     - name: Show platform
-      run: which composer
+      run: which composer && which php 
 
     - name: Install dependencies
       run: php /usr/local/bin/composer install --prefer-dist --no-progress --no-suggest
