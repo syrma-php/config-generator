@@ -16,10 +16,13 @@
     },
     "require-dev": {
         "roave/security-advisories": "dev-master"        ,
+        "johnkary/phpunit-speedtrap": "^1.1 || ^2.0 || ^3.0",
         "phpunit/phpunit": "^7.5",
+        "phpunit/php-invoker": "^2.0",
         "friendsofphp/php-cs-fixer": "2.*",
         "php-cs-fixer/phpunit-constraint-isidenticalstring": "1.*",
-        "php-cs-fixer/phpunit-constraint-xmlmatchesxsd": "1.*"
+        "php-cs-fixer/phpunit-constraint-xmlmatchesxsd": "1.*",
+        "symfony/phpunit-bridge": "3.4.*||4.4.*"
     },
     "license": "GPL3",
     "authors": [
@@ -33,5 +36,10 @@
       "psr-4": {
         "Syrma\\ConfigGenerator\\": "src"
       }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Syrma\\ConfigGenerator\\Tests\\": "tests/"
+        }
     }
 }

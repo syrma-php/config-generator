@@ -4,7 +4,8 @@ PATH_VENDOR    = $(PATH_ROOT)/vendor
 
 CMD_PHP = /usr/bin/env php
 
-
+test:
+	$(CMD_PHP) $(PATH_VENDOR)/bin/phpunit --verbose
 
 cs-fix:
 	$(CMD_PHP) $(PATH_VENDOR)/bin/php-cs-fixer fix --verbose
