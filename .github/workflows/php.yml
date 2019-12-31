@@ -14,15 +14,12 @@ jobs:
       uses: shivammathur/setup-php@v1
       with:
         php-version: '7.2'
-      
-    - name: Show platform
-      run: which composer && which php && php -v
-
+        
     - name: Install dependencies
-      run: php /usr/local/bin/composer install --prefer-dist --no-progress --no-suggest
+      run: composer install --prefer-dist --no-progress --no-suggest
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
 
     - name: Run test suite
-      run: php /usr/local/bin/composer run-script test
+      run: composer run-script test
