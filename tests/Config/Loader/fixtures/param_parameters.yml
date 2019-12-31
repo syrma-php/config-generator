@@ -1,0 +1,5 @@
+parameters:
+    bar: 'foo'
+    file: 'param_parameters'
+
+bad: true
