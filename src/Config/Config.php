@@ -15,9 +15,6 @@ class Config
      */
     private $definitions;
 
-    /**
-     * Config constructor.
-     */
     public function __construct(array $definitions)
     {
         $this->definitions = $definitions;
