@@ -35,10 +35,13 @@ class ConfigDefinition implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('config-generator');
 
-        if (method_exists($treeBuilder, 'root')) {
-            $rootNode = $treeBuilder->root('config-generator');
-        } else {
+        if (method_exists($treeBuilder, 'getRootNode')) {
             $rootNode = $treeBuilder->getRootNode();
+        } else {
+            // @codeCoverageIgnoreStart
+            // Symfony 3.* fallback
+            $rootNode = $treeBuilder->root('config-generator');
+            // @codeCoverageIgnoreEnd
         }
 
         $this->addDefaultSection($rootNode);
