@@ -33,4 +33,10 @@ class ConfigFileTypeTest extends TestCase
 
         $this->assertSame($objP0, $objP1);
     }
+
+    public function testWithBadValue(): self
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        ConfigFileType::create('badValue');
+    }
 }

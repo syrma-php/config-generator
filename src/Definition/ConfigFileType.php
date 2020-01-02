@@ -39,7 +39,7 @@ class ConfigFileType
 
     private function __construct(string $value)
     {
-        if (null === constant($alias = __CLASS__.'::TYPE_'.strtoupper($value))) {
+        if (null === @constant($alias = __CLASS__.'::TYPE_'.strtoupper($value))) {
             throw new InvalidArgumentException(sprintf('The constant (%s) is not defined!', $alias));
         }
 
