@@ -8,7 +8,7 @@ namespace Syrma\ConfigGenerator\Tests\Config\Loader;
 use Symfony\Component\Yaml\Parser;
 use Syrma\ConfigGenerator\Config\Loader\YamlParameterFileLoader;
 
-class YamlConfigFileLoaderTest extends AbstractParameterFileLoaderTest
+class YamlParameterFileLoaderTest extends AbstractParameterFileLoaderTest
 {
 
     private function createLoader(): YamlParameterFileLoader
