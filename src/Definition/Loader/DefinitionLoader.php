@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Syrma\ConfigGenerator\Definition;
+namespace Syrma\ConfigGenerator\Definition\Loader;
 
 use SplFileInfo;
 use Syrma\ConfigGenerator\Config\Factory\ConfigFactory;
+use Syrma\ConfigGenerator\Definition\Definition;
+use Syrma\ConfigGenerator\Definition\Factory\DefinitionFactory;
 
 class DefinitionLoader
 {

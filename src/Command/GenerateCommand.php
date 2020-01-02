@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use Syrma\ConfigGenerator\Definition\Definition;
-use Syrma\ConfigGenerator\Definition\DefinitionLoader;
+use Syrma\ConfigGenerator\Definition\Loader\DefinitionLoader;
 use Syrma\ConfigGenerator\Exception\NotFoundException;
 use Syrma\ConfigGenerator\Generator\Builder\GeneratorContextFactory;
 use Syrma\ConfigGenerator\Generator\Generator;

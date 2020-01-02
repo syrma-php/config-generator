@@ -2,13 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Syrma\ConfigGenerator\Definition;
+namespace Syrma\ConfigGenerator\Definition\Factory;
 
+use Syrma\ConfigGenerator\Definition\Definition;
+use Syrma\ConfigGenerator\Definition\EnvironmentDefinition;
 use function array_replace;
 use SplFileInfo;
 use Symfony\Component\Templating\TemplateNameParserInterface;
 use Syrma\ConfigGenerator\Config\Config;
-use Syrma\ConfigGenerator\Config\ConfigDefinition;
+use Syrma\ConfigGenerator\Config\ConfigDefinition as Def;
 use Syrma\ConfigGenerator\Config\Loader\ParameterFileLoaderInterface;
 
 class DefinitionFactory
@@ -36,7 +38,7 @@ class DefinitionFactory
     {
         $items = [];
         foreach ($config->getDefinitionIds() as $id) {
-            $items[] = $this->createDefinition($id, $config);
+            $items[$id] = $this->createDefinition($id, $config);
         }
 
         return  $items;
@@ -46,7 +48,7 @@ class DefinitionFactory
     {
         return new Definition(
             $definitionId,
-            $config->getDefinition($definitionId)[ConfigDefinition::KEY_TYPE],
+            $config->getDefinition($definitionId)[Def::KEY_TYPE],
             $this->createEnvironments($definitionId, $config)
         );
     }
@@ -59,8 +61,8 @@ class DefinitionFactory
         $definition = $config->getDefinition($definitionId);
 
         $items = [];
-        foreach ($definition[ConfigDefinition::KEY_ENVIROMENTS] as $envId => $env) {
-            $items[] = $this->createEnvironment($definitionId, $envId, $config);
+        foreach ($definition[Def::KEY_ENVIROMENTS] as $envId => $env) {
+            $items[$envId] = $this->createEnvironment($definitionId, $envId, $config);
         }
 
         return $items;
@@ -69,25 +71,25 @@ class DefinitionFactory
     private function createEnvironment(string $definitionId, string $envId, Config $config): EnvironmentDefinition
     {
         $definition = $config->getDefinition($definitionId);
-        $envConfig = $definition[ConfigDefinition::KEY_ENVIROMENTS][$envId];
+        $envConfig = $definition[Def::KEY_ENVIROMENTS][$envId];
 
         $parameters = array_replace(
             [
                 'env' => $envId,
                 'environment' => $envId,
-                'definition' => $definition,
+                'definition' => $definitionId,
             ],
-            $this->parseParameterFiles($definition[ConfigDefinition::KEY_PARAMETER_FILES] ?? []),
-            $definition[ConfigDefinition::KEY_PARAMETERS],
-            $this->parseParameterFiles($envConfig[ConfigDefinition::KEY_PARAMETER_FILES] ?? []),
-            $envConfig[ConfigDefinition::KEY_PARAMETERS]
+            $this->parseParameterFiles($definition[Def::KEY_PARAMETER_FILES] ?? []),
+            $definition[Def::KEY_PARAMETERS],
+            $this->parseParameterFiles($envConfig[Def::KEY_PARAMETER_FILES] ?? []),
+            $envConfig[Def::KEY_PARAMETERS]
         );
 
         return new EnvironmentDefinition(
             $envId,
-            $this->templateNameParser->parse($envConfig[ConfigDefinition::KEY_TEMPLATE]),
-            $envConfig[ConfigDefinition::KEY_OUTPUT_BASE_PATH],
-            $envConfig[ConfigDefinition::KEY_OUTPUT],
+            $this->templateNameParser->parse($envConfig[Def::KEY_TEMPLATE]),
+            $envConfig[Def::KEY_OUTPUT_BASE_PATH],
+            $envConfig[Def::KEY_OUTPUT],
             $parameters
         );
     }
