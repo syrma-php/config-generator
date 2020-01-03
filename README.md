@@ -9,15 +9,15 @@ if the developers use the multi environments.
 defaults:
 
     # Default output path for generator. Absolute path or relative for this file.
-    # Available placeholders: {{env}}, {{enviroment}}, {{definition}}.
-    outputBasePath:       [cwd]
+    # Available placeholders in value: {{env}}, {{environment}}, {{definition}}.
+    outputBasePath:       /srv/szicsu/syrma/config-generator
 
-    # Search list for template searching. Absolute path or relative for this file.
-    # Available placeholders: {{env}}, {{enviroment}}, {{definition}}.
-    templateSearchPaths:
+    # List of parameters for all definition envs.
+    parameters:           []
 
-        # Default:
-        - [cwd]/templates
+    # List of extra parameter files for all definition scopes. Absolute path or relative for this file.
+    # Available placeholders in value: {{env}}, {{environment}}, {{definition}}.
+    parameterFiles:       []
 
 definitions:
 
@@ -25,7 +25,7 @@ definitions:
     definitionId:
 
         # Template for current definition. Absolute path or relative for this file.
-        # Available placeholders: {{env}}, {{enviroment}}, {{definition}}.
+        # Available placeholders in value: {{env}}, {{environment}}, {{definition}}.
         template:             ~ # Required
 
         # Type of the configuration file
@@ -33,36 +33,32 @@ definitions:
 
         # Output base path for generation. Absolute path or relative for this file.
         # If it is empty then it use default.outputBasePath.
-        # Available placeholders: {{env}}, {{enviroment}}, {{definition}}.
+        # Available placeholders in value: {{env}}, {{environment}}, {{definition}}.
         outputBasePath:       ~
-
-        # Search list for template searching.Absolute path or relative for this file.
-        # If it is empty then it use default.templateSearchPaths.
-        # Available placeholders: {{env}}, {{enviroment}}, {{definition}}.
-        templateSearchPaths:  []
 
         # Environment independent parameters for this definition.
         parameters:           []
 
         # List of extra parameter files definition scope. Absolute path or relative for this file.
-        # Available placeholders: {{definition}}.
+        # Available placeholders in value: {{env}}, {{environment}}, {{definition}}.
         parameterFiles:       []
 
         # List of enviroments
-        enviroments:
+        environments:
 
             # Prototype
             envId:
 
                 # Output file name. Absolute file name or relative for outputBasePath
-                # Available placeholders: {{env}}, {{enviroment}}, {{definition}}.
+                # Available placeholders in value: {{env}}, {{environment}}, {{definition}}.
                 output:               ~ # Required
 
                 # Environment dependent parameters for this env.
+                # The $env, $environment and $definition variables automatic add this config
                 parameters:           []
 
                 # List of extra parameters for this env. Absolute path or relative for this file.
-                # Available placeholders: {{env}}, {{enviroment}}, {{definition}}.
+                # Available placeholders in value: {{env}}, {{environment}}, {{definition}}.
                 parameterFiles:       []
 
 ```

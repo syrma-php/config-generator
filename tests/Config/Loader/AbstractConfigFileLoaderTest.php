@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 abstract class AbstractConfigFileLoaderTest extends TestCase
 {
-    protected const FILE_YML_EMPTY = 'conf_empty.yml';
 
     protected function createFileRef( string $name): \SplFileInfo
     {

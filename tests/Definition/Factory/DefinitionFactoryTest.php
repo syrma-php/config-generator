@@ -10,10 +10,10 @@ use Symfony\Component\Templating\TemplateNameParserInterface;
 use Symfony\Component\Templating\TemplateReference;
 use Syrma\ConfigGenerator\Config\Config;
 use Syrma\ConfigGenerator\Config\Loader\ParameterFileLoaderInterface;
-use Syrma\ConfigGenerator\Definition\ConfigFileType;
-use Syrma\ConfigGenerator\Definition\Definition;
-use Syrma\ConfigGenerator\Definition\EnvironmentDefinition;
-use Syrma\ConfigGenerator\Definition\Factory\DefinitionFactory;
+use Syrma\ConfigGenerator\Config\ConfigFileType;
+use Syrma\ConfigGenerator\Config\Definition;
+use Syrma\ConfigGenerator\Config\EnvironmentDefinition;
+use Syrma\ConfigGenerator\Config\Factory\DefinitionFactory;
 use Syrma\ConfigGenerator\Config\ConfigDefinition as Def;
 
 class DefinitionFactoryTest extends TestCase
@@ -37,7 +37,7 @@ class DefinitionFactoryTest extends TestCase
                 Def::KEY_PARAMETER_FILES => [
                     new \SplFileInfo(self::PARAM_FILE_0)
                 ],
-                Def::KEY_ENVIROMENTS => [
+                Def::KEY_ENVIRONMENTS => [
                     'live' => [
                         Def::KEY_PARAMETERS => ['foo' => 'def0-live'],
                         Def::KEY_TEMPLATE => 'def0-live.tpl',
@@ -117,7 +117,7 @@ class DefinitionFactoryTest extends TestCase
                 Def::KEY_PARAMETER_FILES => [
                     new \SplFileInfo(self::PARAM_FILE_0)
                 ],
-                Def::KEY_ENVIROMENTS => [
+                Def::KEY_ENVIRONMENTS => [
                     'live' => [
                         Def::KEY_PARAMETERS => ['foo' => 'def0-live'],
                         Def::KEY_TEMPLATE => 'def0-live.tpl',
@@ -132,7 +132,7 @@ class DefinitionFactoryTest extends TestCase
             'def1' => [
                 Def::KEY_TYPE => ConfigFileType::create(ConfigFileType::TYPE_YML),
                 Def::KEY_PARAMETERS => ['bar' => 'def1', 'foo' => 'badValue'],
-                Def::KEY_ENVIROMENTS => [
+                Def::KEY_ENVIRONMENTS => [
                     'dev' => [
                         Def::KEY_PARAMETERS => ['foo' => 'def1-dev'],
                         Def::KEY_TEMPLATE => 'def1-dev.tpl',

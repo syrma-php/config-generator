@@ -6,7 +6,7 @@ namespace Syrma\ConfigGenerator\Tests\Definition;
 
 
 use PHPUnit\Framework\TestCase;
-use Syrma\ConfigGenerator\Definition\ConfigFileType;
+use Syrma\ConfigGenerator\Config\ConfigFileType;
 
 class ConfigFileTypeTest extends TestCase
 {

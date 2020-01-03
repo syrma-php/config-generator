@@ -6,6 +6,7 @@ namespace Syrma\ConfigGenerator\Config\Loader;
 
 use SplFileInfo;
 use Syrma\ConfigGenerator\Exception\NotFoundException;
+use Syrma\ConfigGenerator\Util\ParameterBag;
 
 class ParameterFileLoader implements ParameterFileLoaderInterface
 {
@@ -33,7 +34,7 @@ class ParameterFileLoader implements ParameterFileLoaderInterface
         }
     }
 
-    public function load(SplFileInfo $file): array
+    public function load(SplFileInfo $file): ParameterBag
     {
         return $this->getLoader($file)->load($file);
     }

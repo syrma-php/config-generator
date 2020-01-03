@@ -11,6 +11,7 @@ use Syrma\ConfigGenerator\Exception\NotFoundException;
 
 class ConfigFileLoaderTest extends AbstractConfigFileLoaderTest
 {
+    private const FILE_YML_EMPTY = 'conf_empty.yml';
 
     public function testEmpty(): void
     {

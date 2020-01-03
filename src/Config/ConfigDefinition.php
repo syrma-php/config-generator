@@ -4,31 +4,27 @@ declare(strict_types=1);
 
 namespace Syrma\ConfigGenerator\Config;
 
-use const DIRECTORY_SEPARATOR;
 use function getcwd;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-use Syrma\ConfigGenerator\Definition\ConfigFileType;
 
 class ConfigDefinition implements ConfigurationInterface
 {
     public const KEY_DEFAULTS = 'defaults';
     public const KEY_OUTPUT_BASE_PATH = 'outputBasePath';
-    public const KEY_TEMPLATE_SEARCH_PATHS = 'templateSearchPaths';
     public const KEY_DEFINITIONS = 'definitions';
     public const KEY_TEMPLATE = 'template';
-    public const KEY_ENVIROMENTS = 'enviroments';
+    public const KEY_ENVIRONMENTS = 'environments';
     public const KEY_OUTPUT = 'output';
     public const KEY_PARAMETERS = 'parameters';
     public const KEY_PARAMETER_FILES = 'parameterFiles';
     public const KEY_TYPE = 'type';
     public const MARKER_ENV = '{{env}}';
-    public const MARKER_ENVIROMENT = '{{enviroment}}';
+    public const MARKER_ENVIRONMENT = '{{environment}}';
     public const MARKER_DEFINITION = '{{definition}}';
 
-    private const MSG_PLACEHOLDERS = 'Available placeholders: '.self::MARKER_ENV.', '.self::MARKER_ENVIROMENT.', '.self::MARKER_DEFINITION.'.';
-    private const MSG_PLACEHOLDERS_SHORT = 'Available placeholders: '.self::MARKER_DEFINITION.'.';
+    private const MSG_PLACEHOLDERS = 'Available placeholders in value: '.self::MARKER_ENV.', '.self::MARKER_ENVIRONMENT.', '.self::MARKER_DEFINITION.'.';
     private const MSG_PATH = 'Absolute path or relative for this file.';
 
     public function getConfigTreeBuilder()
@@ -63,9 +59,13 @@ class ConfigDefinition implements ConfigurationInterface
                             ->cannotBeEmpty()
                         ->end()
 
-                        ->arrayNode(self::KEY_TEMPLATE_SEARCH_PATHS)
-                            ->info('Search list for template searching. '.self::MSG_PATH.PHP_EOL.self::MSG_PLACEHOLDERS)
-                            ->defaultValue([getcwd().DIRECTORY_SEPARATOR.'templates'])
+                        ->arrayNode(self::KEY_PARAMETERS)
+                            ->info('List of parameters for all definition envs.')
+                            ->prototype('variable')->end()
+                        ->end()
+
+                        ->arrayNode(self::KEY_PARAMETER_FILES)
+                            ->info('List of extra parameter files for all definition scopes. '.self::MSG_PATH.PHP_EOL.self::MSG_PLACEHOLDERS)
                             ->prototype('scalar')->end()
                         ->end()
 
@@ -100,22 +100,17 @@ class ConfigDefinition implements ConfigurationInterface
                             ->info('Output base path for generation. '.self::MSG_PATH.PHP_EOL.'If it is empty then it use default.outputBasePath.'.PHP_EOL.self::MSG_PLACEHOLDERS)
                         ->end()
 
-                        ->arrayNode(self::KEY_TEMPLATE_SEARCH_PATHS)
-                            ->info('Search list for template searching.'.self::MSG_PATH.PHP_EOL.'If it is empty then it use default.templateSearchPaths.'.PHP_EOL.self::MSG_PLACEHOLDERS)
-                            ->prototype('scalar')->end()
-                        ->end()
-
                         ->arrayNode(self::KEY_PARAMETERS)
                             ->info('Environment independent parameters for this definition.')
                             ->prototype('variable')->end()
                         ->end()
 
                         ->arrayNode(self::KEY_PARAMETER_FILES)
-                            ->info('List of extra parameter files definition scope. '.self::MSG_PATH.PHP_EOL.self::MSG_PLACEHOLDERS_SHORT)
+                            ->info('List of extra parameter files definition scope. '.self::MSG_PATH.PHP_EOL.self::MSG_PLACEHOLDERS)
                             ->prototype('scalar')->end()
                         ->end()
 
-                        ->arrayNode(self::KEY_ENVIROMENTS)
+                        ->arrayNode(self::KEY_ENVIRONMENTS)
                             ->info('List of enviroments')
                             ->useAttributeAsKey('envId')
                             ->requiresAtLeastOneElement()
@@ -129,7 +124,7 @@ class ConfigDefinition implements ConfigurationInterface
                                     ->end()
 
                                     ->arrayNode(self::KEY_PARAMETERS)
-                                        ->info('Environment dependent parameters for this env.')
+                                        ->info('Environment dependent parameters for this env.' . PHP_EOL . 'The $env, $environment and $definition variables automatic add this config')
                                         ->prototype('variable')->end()
                                     ->end()
 

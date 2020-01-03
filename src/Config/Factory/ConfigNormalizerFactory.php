@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Syrma\ConfigGenerator\Config\Factory;
 
 use Symfony\Component\Filesystem\Filesystem;
-use Syrma\ConfigGenerator\Config\ConfigNormalizer;
+use Syrma\ConfigGenerator\Config\ConfigTransformer;
 
 class ConfigNormalizerFactory
 {
@@ -19,8 +19,8 @@ class ConfigNormalizerFactory
         $this->fs = $fs;
     }
 
-    public function create(array $rawConfig): ConfigNormalizer
+    public function create(array $rawConfig): ConfigTransformer
     {
-        return new ConfigNormalizer($this->fs, $rawConfig);
+        return new ConfigTransformer($this->fs, $rawConfig);
     }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Syrma\ConfigGenerator\Definition;
+namespace Syrma\ConfigGenerator\Config;
 
 use function constant;
 use InvalidArgumentException;

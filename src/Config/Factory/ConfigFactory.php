@@ -8,8 +8,8 @@ use SplFileInfo;
 use Symfony\Component\Config\Definition\Processor;
 use Syrma\ConfigGenerator\Config\Config;
 use Syrma\ConfigGenerator\Config\ConfigDefinition;
-use Syrma\ConfigGenerator\Config\ConfigDefinition as Def;
 use Syrma\ConfigGenerator\Config\Loader\ConfigFileLoaderInterface;
+use Syrma\ConfigGenerator\Config\Factory\DefinitionFactory;
 
 class ConfigFactory
 {
@@ -19,24 +19,39 @@ class ConfigFactory
     private $configFileLoader;
 
     /**
-     * @var ConfigNormalizerFactory
+     * @var DefinitionFactory
      */
-    private $normalizerFactory;
+    private $definitionFactory;
 
-    public function __construct(ConfigFileLoaderInterface $configFileLoader, ConfigNormalizerFactory $normalizerFactory)
+    /**
+     * ConfigFactory constructor.
+     * @param ConfigFileLoaderInterface $configFileLoader
+     * @param DefinitionFactory $definitionFactory
+     */
+    public function __construct(ConfigFileLoaderInterface $configFileLoader, DefinitionFactory $definitionFactory)
     {
         $this->configFileLoader = $configFileLoader;
-        $this->normalizerFactory = $normalizerFactory;
+        $this->definitionFactory = $definitionFactory;
     }
 
     public function create(SplFileInfo $configFile): Config
     {
-        $rawConfigList = $this->configFileLoader->load($configFile);
-        $config = (new Processor())->processConfiguration(new ConfigDefinition(), $rawConfigList);
-        $config = $this->normalizerFactory->create($config)->normalize();
+        $rawConfig = $this->loadRawConfig($configFile);
 
         return new Config(
-            $config[Def::KEY_DEFINITIONS]
+            $this->definitionFactory->createByRawConfig($rawConfig)
+        );
+    }
+
+    /**
+     * @param SplFileInfo $configFile
+     * @return array
+     */
+    private function loadRawConfig(SplFileInfo $configFile): array
+    {
+        return (new Processor())->processConfiguration(
+            new ConfigDefinition(),
+            $this->configFileLoader->load($configFile)
         );
     }
 }

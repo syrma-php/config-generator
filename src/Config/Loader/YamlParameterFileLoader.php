@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Syrma\ConfigGenerator\Config\Loader;
 
+use Syrma\ConfigGenerator\Util\ParameterBag;
 use function in_array;
 use SplFileInfo;
 use Symfony\Component\Yaml\Parser;
@@ -25,10 +26,10 @@ class YamlParameterFileLoader implements ParameterFileLoaderInterface
         return in_array($file->getExtension(), ['yml', 'yaml'], true);
     }
 
-    public function load(SplFileInfo $file): array
+    public function load(SplFileInfo $file): ParameterBag
     {
         $data = $this->parser->parseFile($file->getPathname());
 
-        return $data['parameters'] ?? (array) $data;
+        return new ParameterBag($data['parameters'] ?? (array) $data);
     }
 }

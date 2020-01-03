@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Syrma\ConfigGenerator\Command;
 
+use Syrma\ConfigGenerator\Config\Factory\ConfigFactory;
 use const DIRECTORY_SEPARATOR;
 use Exception;
 use SplFileInfo;
@@ -15,8 +16,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
-use Syrma\ConfigGenerator\Definition\Definition;
-use Syrma\ConfigGenerator\Definition\Loader\DefinitionLoader;
+use Syrma\ConfigGenerator\Config\Definition;
 use Syrma\ConfigGenerator\Exception\NotFoundException;
 use Syrma\ConfigGenerator\Generator\Builder\GeneratorContextFactory;
 use Syrma\ConfigGenerator\Generator\Generator;
@@ -29,9 +29,9 @@ class GenerateCommand extends Command
     public const OPT_DEFINITION = 'definition';
 
     /**
-     * @var DefinitionLoader
+     * @var ConfigFactory
      */
-    private $definitionLoader;
+    private $configFactory;
 
     /**
      * @var Generator
@@ -48,13 +48,20 @@ class GenerateCommand extends Command
      */
     private $contextFactory;
 
-    public function __construct(DefinitionLoader $definitionLoader, Generator $generator, Filesystem $fs, GeneratorContextFactory $contextBuilder)
+    /**
+     * GenerateCommand constructor.
+     * @param ConfigFactory $configFactory
+     * @param Generator $generator
+     * @param Filesystem $fs
+     * @param GeneratorContextFactory $contextFactory
+     */
+    public function __construct(ConfigFactory $configFactory, Generator $generator, Filesystem $fs, GeneratorContextFactory $contextFactory)
     {
         parent::__construct();
-        $this->definitionLoader = $definitionLoader;
+        $this->configFactory = $configFactory;
         $this->generator = $generator;
         $this->fs = $fs;
-        $this->contextFactory = $contextBuilder;
+        $this->contextFactory = $contextFactory;
     }
 
     protected function configure()
@@ -73,12 +80,11 @@ class GenerateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $definitionList = $this->definitionLoader->load($this->resolveConfigFile($input->getArgument(self::ARG_DEFINITION_FILE)));
         $io = new SymfonyStyle($input, $output);
+        $config = $this->configFactory->create($this->resolveConfigFile($input->getArgument(self::ARG_DEFINITION_FILE)));
 
-        if (!empty($definition = $input->getOption(self::OPT_DEFINITION))) {
-            $definitionList = $this->filterDefinitions($definition, $definitionList);
-        }
+        $definitionList = !empty($definitionId = $input->getOption(self::OPT_DEFINITION)) ?
+            [ $config->getDefinition($definitionId)] : $config->getDefinitions();
 
         if (false === $input->getOption(self::OPT_FORCE) && true === $this->executeCheck($definitionList, $io)) {
             return 1;
@@ -150,17 +156,5 @@ class GenerateCommand extends Command
                 }
             }
         }
-    }
-
-    private function filterDefinitions(string $definitionId, array $definitionList): array
-    {
-        /** @var Definition[] $definitionList */
-        foreach ($definitionList as $definition) {
-            if ($definition->getId() === $definitionId) {
-                return [$definition];
-            }
-        }
-
-        throw new NotFoundException(sprintf('The "%s" definition not found in configuration files!', $definitionId));
     }
 }

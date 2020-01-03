@@ -6,12 +6,12 @@ namespace Syrma\ConfigGenerator\Tests\Config\Factory;
 
 
 use PHPUnit\Framework\TestCase;
-use Syrma\ConfigGenerator\Config\ConfigNormalizer;
+use Syrma\ConfigGenerator\Config\ConfigTransformer;
 use Syrma\ConfigGenerator\Config\Factory\ConfigFactory;
 use Syrma\ConfigGenerator\Config\Factory\ConfigNormalizerFactory;
 use Syrma\ConfigGenerator\Config\Loader\ConfigFileLoaderInterface;
 use Syrma\ConfigGenerator\Config\ConfigDefinition as Def;
-use Syrma\ConfigGenerator\Definition\ConfigFileType;
+use Syrma\ConfigGenerator\Config\ConfigFileType;
 
 class ConfigFactoryTest extends TestCase
 {
@@ -25,7 +25,7 @@ class ConfigFactoryTest extends TestCase
                     Def::KEY_TEMPLATE => 'def0-live.tpl',
                     Def::KEY_OUTPUT_BASE_PATH => 'def0.outputBasePath',
                     Def::KEY_PARAMETERS => ['bar' => 'def0', 'foo' => 'badValue'],
-                    Def::KEY_ENVIROMENTS => [
+                    Def::KEY_ENVIRONMENTS => [
                         'live' => [
                             Def::KEY_PARAMETERS => ['foo' => 'def0-live'],
                             Def::KEY_OUTPUT => 'def0-live.outputBasePath.conf',
@@ -36,7 +36,7 @@ class ConfigFactoryTest extends TestCase
                     Def::KEY_TYPE => ConfigFileType::TYPE_XML,
                     Def::KEY_TEMPLATE => 'def1-live.tpl',
                     Def::KEY_OUTPUT_BASE_PATH => 'def1.outputBasePath',
-                    Def::KEY_ENVIROMENTS => [
+                    Def::KEY_ENVIRONMENTS => [
                         'live' => [
                             Def::KEY_OUTPUT => 'def1-live.outputBasePath.conf',
                         ]
@@ -67,11 +67,11 @@ class ConfigFactoryTest extends TestCase
 
         $factory->expects($this->once())->method('create')->willReturnCallback(function(array $config){
 
-            $normalizer = $this->getMockBuilder(ConfigNormalizer::class)
+            $normalizer = $this->getMockBuilder(ConfigTransformer::class)
                 ->disableOriginalConstructor()
                 ->getMock()
             ;
-            $normalizer->method('normalize')->willReturn($config);
+            $normalizer->method('transform')->willReturn($config);
 
             return $normalizer;
         });

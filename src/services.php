@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Syrma\ConfigGenerator;
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Syrma\ConfigGenerator\Config\Loader\ParameterFileAggregateLoader;
+use Syrma\ConfigGenerator\Config\Factory\DefinitionBuilderFactory;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\inline;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
 use Symfony\Component\Filesystem\Filesystem;
@@ -17,13 +19,11 @@ use Symfony\Component\Yaml\Parser;
 use Syrma\ConfigGenerator\Command\DumpReferenceCommand;
 use Syrma\ConfigGenerator\Command\GenerateCommand;
 use Syrma\ConfigGenerator\Config\Factory\ConfigFactory;
-use Syrma\ConfigGenerator\Config\Factory\ConfigNormalizerFactory;
 use Syrma\ConfigGenerator\Config\Loader\ConfigFileLoader;
 use Syrma\ConfigGenerator\Config\Loader\ParameterFileLoader;
 use Syrma\ConfigGenerator\Config\Loader\YamlConfigFileLoader;
 use Syrma\ConfigGenerator\Config\Loader\YamlParameterFileLoader;
-use Syrma\ConfigGenerator\Definition\Factory\DefinitionFactory;
-use Syrma\ConfigGenerator\Definition\Loader\DefinitionLoader;
+use Syrma\ConfigGenerator\Config\Factory\DefinitionFactory;
 use Syrma\ConfigGenerator\Generator\Builder\GeneratorContextFactory;
 use Syrma\ConfigGenerator\Generator\Generator;
 use Syrma\ConfigGenerator\Generator\HeaderGenerator\BlockCommentBaseHeaderGenerator;
@@ -37,7 +37,7 @@ return static function (ContainerConfigurator $configurator) {
 
     $services->set('command.generator', GenerateCommand::class)
         ->public()
-        ->arg(0, ref('definition.loader'))
+        ->arg(0, ref('config.factory'))
         ->arg(1, ref('generator.generator'))
         ->arg(2, ref('symfony.filesystem'))
         ->arg(3, ref('generator.context.factory'))
@@ -50,28 +50,24 @@ return static function (ContainerConfigurator $configurator) {
     ;
 
     /*************** CONFIG *********************/
-    $services->set('definition.loader', DefinitionLoader::class)
+    $services->set('config.factory.definition', DefinitionFactory::class)
         ->private()
-        ->arg(0, ref('config.factory'))
-        ->arg(1, ref('definition.factory'))
+        ->arg(0, ref('symfony.filesystem'))
+        ->arg(1, ref('symfony.templating.template_name_parser'))
+        ->arg(2, ref('config.parameter_file.aggregate_loader'))
+        ->arg(3, ref('config.factory.definition_builder'))
     ;
 
-    $services->set('definition.factory', DefinitionFactory::class)
+    $services->set('config.factory.definition_builder', DefinitionBuilderFactory::class)
         ->private()
-        ->arg(0, ref('symfony.templating.template_name_parser'))
-        ->arg(1, ref('config.parameter_file.loader'))
     ;
 
     $services->set('config.factory', ConfigFactory::class)
         ->private()
         ->arg(0, ref('config.file.loader'))
-        ->arg(1, ref('config.normalizer.factory'))
+        ->arg(1, ref('config.factory.definition'))
     ;
 
-    $services->set('config.normalizer.factory', ConfigNormalizerFactory::class)
-        ->private()
-        ->arg(0, ref('symfony.filesystem'))
-    ;
 
     $services->set('config.file.loader', ConfigFileLoader::class)
         ->private()
@@ -81,6 +77,11 @@ return static function (ContainerConfigurator $configurator) {
     $services->set('config.file.loader.yml', YamlConfigFileLoader::class)
         ->private()
         ->arg(0, ref('symfony.yaml.parser'))
+    ;
+
+    $services->set('config.parameter_file.aggregate_loader', ParameterFileAggregateLoader::class)
+        ->private()
+        ->arg(0, ref('config.parameter_file.loader'))
     ;
 
     $services->set('config.parameter_file.loader', ParameterFileLoader::class)

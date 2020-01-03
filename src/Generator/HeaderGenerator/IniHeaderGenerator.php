@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Syrma\ConfigGenerator\Generator\HeaderGenerator;
 
-use Syrma\ConfigGenerator\Definition\ConfigFileType;
+use Syrma\ConfigGenerator\Config\ConfigFileType;
 
 class IniHeaderGenerator extends AbstractHeaderGenerator
 {

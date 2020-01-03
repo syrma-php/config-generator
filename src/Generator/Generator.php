@@ -53,7 +53,7 @@ class Generator
     {
         $env = $context->getEnvironment();
 
-        return $this->engine->render($env->getTemplate(), $env->getParameters());
+        return $this->engine->render($env->getTemplate(), $env->getParameters()->all());
     }
 
     private function generateHeader(string $content, GeneratorContext $context): string

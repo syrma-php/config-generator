@@ -1,0 +1,8 @@
+definitions:
+    def0:
+        type: 'yml'
+        template: 'templates/foo.tpl'
+        outputBasePath: 'out'
+        environments:
+            live:
+                output: 'live.conf'

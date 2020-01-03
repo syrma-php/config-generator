@@ -68,13 +68,6 @@ class YamlConfigFileLoader implements ConfigFileLoaderInterface
             $config[Def::KEY_DEFAULTS][Def::KEY_OUTPUT_BASE_PATH] = $this->resolvePathValue($config[Def::KEY_DEFAULTS][Def::KEY_OUTPUT_BASE_PATH], $rootPath);
         }
 
-        if (!empty($config[Def::KEY_DEFAULTS][Def::KEY_TEMPLATE_SEARCH_PATHS])) {
-            $config[Def::KEY_DEFAULTS][Def::KEY_TEMPLATE_SEARCH_PATHS] = $this->resolvePathValueList(
-                (array) $config[Def::KEY_DEFAULTS][Def::KEY_TEMPLATE_SEARCH_PATHS],
-                $rootPath
-            );
-        }
-
         if (!empty($config[Def::KEY_DEFINITIONS])) {
             foreach ((array) $config[Def::KEY_DEFINITIONS] as $defId => $defConf) {
                 foreach ([Def::KEY_OUTPUT_BASE_PATH, Def::KEY_TEMPLATE] as $key) {
@@ -83,16 +76,16 @@ class YamlConfigFileLoader implements ConfigFileLoaderInterface
                     }
                 }
 
-                foreach ([Def::KEY_TEMPLATE_SEARCH_PATHS, Def::KEY_PARAMETER_FILES] as $key) {
+                foreach ([Def::KEY_PARAMETER_FILES] as $key) {
                     if (!empty($defConf[$key])) {
                         $config[Def::KEY_DEFINITIONS][$defId][$key] = $this->resolvePathValueList((array) $defConf[$key], $rootPath);
                     }
                 }
 
-                if (!empty($defConf[Def::KEY_ENVIROMENTS])) {
-                    foreach ((array) $defConf[Def::KEY_ENVIROMENTS] as $envId => $envConf) {
+                if (!empty($defConf[Def::KEY_ENVIRONMENTS])) {
+                    foreach ((array) $defConf[Def::KEY_ENVIRONMENTS] as $envId => $envConf) {
                         if (!empty($envConf[Def::KEY_PARAMETER_FILES])) {
-                            $config[Def::KEY_DEFINITIONS][$defId][Def::KEY_ENVIROMENTS][$envId][Def::KEY_PARAMETER_FILES] = $this->resolvePathValueList((array) $envConf[Def::KEY_PARAMETER_FILES], $rootPath);
+                            $config[Def::KEY_DEFINITIONS][$defId][Def::KEY_ENVIRONMENTS][$envId][Def::KEY_PARAMETER_FILES] = $this->resolvePathValueList((array) $envConf[Def::KEY_PARAMETER_FILES], $rootPath);
                         }
                     }
                 }
