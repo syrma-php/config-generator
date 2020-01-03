@@ -1,9 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
-
 namespace Syrma\ConfigGenerator\Config\Builder;
-
 
 use Symfony\Component\Templating\TemplateReferenceInterface;
 use Syrma\ConfigGenerator\Config\EnvironmentDefinition;
@@ -44,8 +43,6 @@ class EnvironmentDefinitionBuilder
 
     /**
      * EnvironmentDefinitionBuilder constructor.
-     * @param DefinitionBuilder $definitionBuilder
-     * @param string $name
      */
     public function __construct(DefinitionBuilder $definitionBuilder, string $name)
     {
@@ -53,59 +50,41 @@ class EnvironmentDefinitionBuilder
         $this->name = $name;
     }
 
-    /**
-     * @return DefinitionBuilder
-     */
     public function getDefinitionBuilder(): DefinitionBuilder
     {
         return $this->definitionBuilder;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param TemplateReferenceInterface $template
-     * @return EnvironmentDefinitionBuilder
-     */
-    public function setTemplate(TemplateReferenceInterface $template): EnvironmentDefinitionBuilder
+    public function setTemplate(TemplateReferenceInterface $template): self
     {
         $this->template = $template;
+
         return $this;
     }
 
-    /**
-     * @param string $outputPath
-     * @return EnvironmentDefinitionBuilder
-     */
-    public function setOutputPath(string $outputPath): EnvironmentDefinitionBuilder
+    public function setOutputPath(string $outputPath): self
     {
         $this->outputPath = $outputPath;
+
         return $this;
     }
 
-    /**
-     * @param string $outputFileName
-     * @return EnvironmentDefinitionBuilder
-     */
-    public function setOutputFileName(string $outputFileName): EnvironmentDefinitionBuilder
+    public function setOutputFileName(string $outputFileName): self
     {
         $this->outputFileName = $outputFileName;
+
         return $this;
     }
 
-    /**
-     * @param ParameterBag $parameters
-     * @return EnvironmentDefinitionBuilder
-     */
-    public function setParameters(ParameterBag $parameters): EnvironmentDefinitionBuilder
+    public function setParameters(ParameterBag $parameters): self
     {
         $this->parameters = $parameters;
+
         return $this;
     }
 
@@ -125,5 +104,4 @@ class EnvironmentDefinitionBuilder
             $this->parameters
         );
     }
-
 }

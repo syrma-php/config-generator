@@ -1,9 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
-
 namespace Syrma\ConfigGenerator\Util;
-
 
 class ParameterBag
 {
@@ -12,9 +11,6 @@ class ParameterBag
      */
     private $data;
 
-    /**
-     * @param array $data
-     */
     public function __construct(array $data)
     {
         $this->data = $data;

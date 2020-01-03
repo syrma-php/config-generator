@@ -1,9 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
-
 namespace Syrma\ConfigGenerator\Config\Builder;
-
 
 use Syrma\ConfigGenerator\Config\ConfigFileType;
 use Syrma\ConfigGenerator\Config\Definition;
@@ -27,40 +26,32 @@ class DefinitionBuilder
      */
     private $environmentMap = [];
 
-    /**
-     * @param string $id
-     */
     public function __construct(string $id)
     {
         $this->id = $id;
     }
 
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return $this->id;
     }
 
-    /**
-     * @param ConfigFileType $type
-     * @return DefinitionBuilder
-     */
-    public function setType(ConfigFileType $type): DefinitionBuilder
+    public function setType(ConfigFileType $type): self
     {
         $this->type = $type;
+
         return $this;
     }
 
-    public function addEnv( EnvironmentDefinition $environmentDefinition ): DefinitionBuilder
+    public function addEnv(EnvironmentDefinition $environmentDefinition): self
     {
         Assert::eq($environmentDefinition->getDefinitionId(), $this->id);
         $this->environmentMap[$environmentDefinition->getName()] = $environmentDefinition;
+
         return $this;
     }
 
-    public function createEnvBuilder( string $envName ): EnvironmentDefinitionBuilder
+    public function createEnvBuilder(string $envName): EnvironmentDefinitionBuilder
     {
         return new EnvironmentDefinitionBuilder($this, $envName);
     }

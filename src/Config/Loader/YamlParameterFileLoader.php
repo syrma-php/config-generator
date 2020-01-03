@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Syrma\ConfigGenerator\Config\Loader;
 
-use Syrma\ConfigGenerator\Util\ParameterBag;
 use function in_array;
 use SplFileInfo;
 use Symfony\Component\Yaml\Parser;
+use Syrma\ConfigGenerator\Util\ParameterBag;
 
 class YamlParameterFileLoader implements ParameterFileLoaderInterface
 {

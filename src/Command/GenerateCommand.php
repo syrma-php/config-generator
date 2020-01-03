@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Syrma\ConfigGenerator\Command;
 
-use Syrma\ConfigGenerator\Config\Factory\ConfigFactory;
 use const DIRECTORY_SEPARATOR;
 use Exception;
 use SplFileInfo;
@@ -17,6 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use Syrma\ConfigGenerator\Config\Definition;
+use Syrma\ConfigGenerator\Config\Factory\ConfigFactory;
 use Syrma\ConfigGenerator\Exception\NotFoundException;
 use Syrma\ConfigGenerator\Generator\Builder\GeneratorContextFactory;
 use Syrma\ConfigGenerator\Generator\Generator;
@@ -50,10 +50,6 @@ class GenerateCommand extends Command
 
     /**
      * GenerateCommand constructor.
-     * @param ConfigFactory $configFactory
-     * @param Generator $generator
-     * @param Filesystem $fs
-     * @param GeneratorContextFactory $contextFactory
      */
     public function __construct(ConfigFactory $configFactory, Generator $generator, Filesystem $fs, GeneratorContextFactory $contextFactory)
     {
@@ -84,7 +80,7 @@ class GenerateCommand extends Command
         $config = $this->configFactory->create($this->resolveConfigFile($input->getArgument(self::ARG_DEFINITION_FILE)));
 
         $definitionList = !empty($definitionId = $input->getOption(self::OPT_DEFINITION)) ?
-            [ $config->getDefinition($definitionId)] : $config->getDefinitions();
+            [$config->getDefinition($definitionId)] : $config->getDefinitions();
 
         if (false === $input->getOption(self::OPT_FORCE) && true === $this->executeCheck($definitionList, $io)) {
             return 1;

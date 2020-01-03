@@ -124,7 +124,7 @@ class ConfigDefinition implements ConfigurationInterface
                                     ->end()
 
                                     ->arrayNode(self::KEY_PARAMETERS)
-                                        ->info('Environment dependent parameters for this env.' . PHP_EOL . 'The $env, $environment and $definition variables automatic add this config')
+                                        ->info('Environment dependent parameters for this env.'.PHP_EOL.'The $env, $environment and $definition variables automatic add this config')
                                         ->prototype('variable')->end()
                                     ->end()
 

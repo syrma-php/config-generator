@@ -1,13 +1,14 @@
 <?php
-declare(strict_types=1);
 
+declare(strict_types=1);
 
 namespace Syrma\ConfigGenerator\Util;
 
+use function dirname;
 
 class FilesystemToolkit
 {
-    public static function isWritableAnyPath( string $basePath ): bool
+    public static function isWritableAnyPath(string $basePath): bool
     {
         $prevPath = null;
         $currPath = $basePath;

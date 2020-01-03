@@ -1,9 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
-
 namespace Syrma\ConfigGenerator\Config\Loader;
-
 
 use SplFileInfo;
 use Syrma\ConfigGenerator\Util\ParameterBag;
@@ -15,9 +14,6 @@ class ParameterFileAggregateLoader implements ParameterFileLoaderInterface
      */
     private $innerLoader;
 
-    /**
-     * @param ParameterFileLoaderInterface $innerLoader
-     */
     public function __construct(ParameterFileLoaderInterface $innerLoader)
     {
         $this->innerLoader = $innerLoader;
@@ -33,14 +29,13 @@ class ParameterFileAggregateLoader implements ParameterFileLoaderInterface
         return $this->innerLoader->load($file);
     }
 
-    public function loadByList( SplFileInfo ...$files): ParameterBag
+    public function loadByList(SplFileInfo ...$files): ParameterBag
     {
         $paramBag = new ParameterBag([]);
-        foreach ($files as $file){
-            $paramBag->append( $this->load($file));
+        foreach ($files as $file) {
+            $paramBag->append($this->load($file));
         }
 
         return $paramBag;
     }
-
 }

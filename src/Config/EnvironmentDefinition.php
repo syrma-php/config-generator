@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Syrma\ConfigGenerator\Config;
 
-use Syrma\ConfigGenerator\Util\ParameterBag;
 use const DIRECTORY_SEPARATOR;
 use Symfony\Component\Templating\TemplateReferenceInterface;
+use Syrma\ConfigGenerator\Util\ParameterBag;
 
 class EnvironmentDefinition
 {
@@ -40,14 +40,6 @@ class EnvironmentDefinition
      */
     private $parameters;
 
-    /**
-     * @param string $definitionId
-     * @param string $name
-     * @param TemplateReferenceInterface $template
-     * @param string $outputPath
-     * @param string $outputFileName
-     * @param ParameterBag $parameters
-     */
     public function __construct(string $definitionId, string $name, TemplateReferenceInterface $template, string $outputPath, string $outputFileName, ParameterBag $parameters)
     {
         $this->definitionId = $definitionId;
@@ -58,9 +50,6 @@ class EnvironmentDefinition
         $this->parameters = $parameters;
     }
 
-    /**
-     * @return string
-     */
     public function getDefinitionId(): string
     {
         return $this->definitionId;

@@ -22,8 +22,8 @@ class Definition
     private $environmentMap;
 
     /**
-     * @param string $id - id of definition
-     * @param ConfigFileType $type - type of definition
+     * @param string                  $id             - id of definition
+     * @param ConfigFileType          $type           - type of definition
      * @param EnvironmentDefinition[] $environmentMap
      */
     public function __construct(string $id, ConfigFileType $type, array $environmentMap)

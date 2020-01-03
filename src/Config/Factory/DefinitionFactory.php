@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace Syrma\ConfigGenerator\Config\Factory;
 
-
-use Symfony\Component\Templating\TemplateNameParserInterface;
-use Syrma\ConfigGenerator\Config\Loader\ParameterFileAggregateLoader;
-use Syrma\ConfigGenerator\Config\Builder\DefinitionBuilder;
-use Syrma\ConfigGenerator\Config\Builder\EnvironmentDefinitionBuilder;
-use Syrma\ConfigGenerator\Config\Definition;
-use Syrma\ConfigGenerator\Util\FilesystemToolkit;
-use Syrma\ConfigGenerator\Util\ParameterBag;
 use SplFileInfo;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Templating\TemplateNameParserInterface;
+use Syrma\ConfigGenerator\Config\Builder\DefinitionBuilder;
+use Syrma\ConfigGenerator\Config\Builder\EnvironmentDefinitionBuilder;
 use Syrma\ConfigGenerator\Config\ConfigDefinition as Def;
 use Syrma\ConfigGenerator\Config\ConfigFileType;
+use Syrma\ConfigGenerator\Config\Definition;
+use Syrma\ConfigGenerator\Config\Loader\ParameterFileAggregateLoader;
 use Syrma\ConfigGenerator\Exception\InvalidConfigurationException;
+use Syrma\ConfigGenerator\Util\FilesystemToolkit;
+use Syrma\ConfigGenerator\Util\ParameterBag;
 
 class DefinitionFactory
 {
@@ -44,19 +43,12 @@ class DefinitionFactory
     private const SCOPE_DEFINITION = 'definition';
     private const SCOPE_ENVIRONMENT = 'environment';
 
-    /**
-     * @param Filesystem $fs
-     * @param TemplateNameParserInterface $templateNameParser
-     * @param ParameterFileAggregateLoader $paramFileLoader
-     * @param DefinitionBuilderFactory $definitionBuilderFactory
-     */
     public function __construct(
         Filesystem $fs,
         TemplateNameParserInterface $templateNameParser,
         ParameterFileAggregateLoader $paramFileLoader,
         DefinitionBuilderFactory $definitionBuilderFactory
-    )
-    {
+    ) {
         $this->fs = $fs;
         $this->templateNameParser = $templateNameParser;
         $this->paramFileLoader = $paramFileLoader;
@@ -65,13 +57,13 @@ class DefinitionFactory
 
     /**
      * @param array $rawConfig - the raw configuration
+     *
      * @return Definition[]
      */
     public function createByRawConfig(array $rawConfig): array
     {
         $definitions = [];
         foreach (array_keys($rawConfig[Def::KEY_DEFINITIONS] ?? []) as $id) {
-
             $defBuilder = $this->definitionBuilderFactory->create($id);
             $this->configureDefinition($rawConfig, $defBuilder);
             $definitions[$id] = $defBuilder->getDefinition();
@@ -86,10 +78,9 @@ class DefinitionFactory
         $defBuilder->setType(ConfigFileType::create($rawDefConfig[Def::KEY_TYPE]));
 
         foreach (array_keys($rawDefConfig[Def::KEY_ENVIRONMENTS]) as $envId) {
-
             $envBuilder = $defBuilder->createEnvBuilder($envId);
             $this->configureEnvironment($rawConfig, $envBuilder);
-            $defBuilder->addEnv( $envBuilder->getEnvironmentDefinition() );
+            $defBuilder->addEnv($envBuilder->getEnvironmentDefinition());
         }
     }
 
@@ -105,8 +96,8 @@ class DefinitionFactory
 
     private function configureTemplate(array &$rawDefConfig, EnvironmentDefinitionBuilder $envBuilder): void
     {
-        $template = strtr( $rawDefConfig[Def::KEY_TEMPLATE], $this->createMarkerMap($envBuilder) );
-        if( false === $this->fs->exists($template) ){
+        $template = strtr($rawDefConfig[Def::KEY_TEMPLATE], $this->createMarkerMap($envBuilder));
+        if (false === $this->fs->exists($template)) {
             throw new InvalidConfigurationException(sprintf('The template file "%s" is not exists!', $template));
         }
 
@@ -120,7 +111,7 @@ class DefinitionFactory
             $this->createMarkerMap($envBuilder)
         );
 
-        if( false === FilesystemToolkit::isWritableAnyPath($basePath) ){
+        if (false === FilesystemToolkit::isWritableAnyPath($basePath)) {
             throw new InvalidConfigurationException(sprintf('The output path "%s" is not writeable!', $basePath));
         }
 
@@ -141,7 +132,7 @@ class DefinitionFactory
         $paramBag = new ParameterBag([
             'env' => $envBuilder->getName(),
             'environment' => $envBuilder->getName(),
-            'definition' =>$envBuilder->getDefinitionBuilder()->getId(),
+            'definition' => $envBuilder->getDefinitionBuilder()->getId(),
         ]);
 
         $paramBag->append($this->paramFileLoader->loadByList(...$paramFileMap[self::SCOPE_DEFAULT]));
@@ -165,22 +156,23 @@ class DefinitionFactory
         ];
 
         $markerMap = $this->createMarkerMap($envBuilder);
-        foreach ($rawConfig[Def::KEY_DEFINITIONS][Def::KEY_PARAMETER_FILES]??[] as $file){
+        foreach ($rawConfig[Def::KEY_DEFINITIONS][Def::KEY_PARAMETER_FILES] ?? [] as $file) {
             $paramFileMap[self::SCOPE_DEFAULT][] = $this->resolveParameterFile($file, $markerMap);
         }
 
-        foreach ( $rawDefConfig[Def::KEY_PARAMETER_FILES] ?? [] as $file){
+        foreach ($rawDefConfig[Def::KEY_PARAMETER_FILES] ?? [] as $file) {
             $paramFileMap[self::SCOPE_DEFINITION][] = $this->resolveParameterFile($file, $markerMap);
         }
 
-        foreach ( $rawDefConfig[Def::KEY_ENVIRONMENTS][$envBuilder->getName()][Def::KEY_PARAMETER_FILES] ?? [] as $file  ){
+        foreach ($rawDefConfig[Def::KEY_ENVIRONMENTS][$envBuilder->getName()][Def::KEY_PARAMETER_FILES] ?? [] as $file) {
             $paramFileMap[self::SCOPE_ENVIRONMENT][] = $this->resolveParameterFile($file, $markerMap);
         }
 
         return $paramFileMap;
     }
 
-    private function createMarkerMap(EnvironmentDefinitionBuilder $envBuilder ):array {
+    private function createMarkerMap(EnvironmentDefinitionBuilder $envBuilder): array
+    {
         return [
             Def::MARKER_DEFINITION => $envBuilder->getName(),
             Def::MARKER_ENV => $envBuilder->getName(),

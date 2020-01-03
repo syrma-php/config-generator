@@ -9,7 +9,6 @@ use Symfony\Component\Config\Definition\Processor;
 use Syrma\ConfigGenerator\Config\Config;
 use Syrma\ConfigGenerator\Config\ConfigDefinition;
 use Syrma\ConfigGenerator\Config\Loader\ConfigFileLoaderInterface;
-use Syrma\ConfigGenerator\Config\Factory\DefinitionFactory;
 
 class ConfigFactory
 {
@@ -25,8 +24,6 @@ class ConfigFactory
 
     /**
      * ConfigFactory constructor.
-     * @param ConfigFileLoaderInterface $configFileLoader
-     * @param DefinitionFactory $definitionFactory
      */
     public function __construct(ConfigFileLoaderInterface $configFileLoader, DefinitionFactory $definitionFactory)
     {
@@ -43,10 +40,6 @@ class ConfigFactory
         );
     }
 
-    /**
-     * @param SplFileInfo $configFile
-     * @return array
-     */
     private function loadRawConfig(SplFileInfo $configFile): array
     {
         return (new Processor())->processConfiguration(
