@@ -1,10 +1,10 @@
 <?php
-declare(strict_types=1);
 
+declare(strict_types=1);
 
 namespace Syrma\ConfigGenerator\Tests\Config\Loader;
 
-
+use SplFileInfo;
 use Syrma\ConfigGenerator\Config\Loader\ConfigFileLoader;
 use Syrma\ConfigGenerator\Config\Loader\ConfigFileLoaderInterface;
 use Syrma\ConfigGenerator\Exception\NotFoundException;
@@ -28,14 +28,15 @@ class ConfigFileLoaderTest extends AbstractConfigFileLoaderTest
         $mock0->expects($this->exactly(2))->method('isSupported')->willReturn(false);
         $mock0->expects($this->never())->method('load');
 
-
         $mock1 = $this->getMockBuilder(ConfigFileLoaderInterface::class)->getMock();
-        $mock1->expects($this->exactly(2))->method('isSupported')->willReturnCallback(function (\SplFileInfo $file){
+        $mock1->expects($this->exactly(2))->method('isSupported')->willReturnCallback(function (SplFileInfo $file) {
             $this->assertEquals(self::FILE_YML_EMPTY, $file->getFilename());
+
             return true;
-        });;
-        $mock1->expects($this->once())->method('load')->willReturnCallback(function (\SplFileInfo $file){
+        });
+        $mock1->expects($this->once())->method('load')->willReturnCallback(function (SplFileInfo $file) {
             $this->assertEquals(self::FILE_YML_EMPTY, $file->getFilename());
+
             return ['foo' => 'bar'];
         });
 
@@ -44,7 +45,7 @@ class ConfigFileLoaderTest extends AbstractConfigFileLoaderTest
         $mock2->expects($this->never())->method('load');
 
         $obj = new ConfigFileLoader($mock0, $mock1, $mock2);
-        $this->assertTrue($obj->isSupported( $this->createFileRef(self::FILE_YML_EMPTY)));
-        $this->assertEquals(['foo' => 'bar'],$obj->load($this->createFileRef(self::FILE_YML_EMPTY)));
+        $this->assertTrue($obj->isSupported($this->createFileRef(self::FILE_YML_EMPTY)));
+        $this->assertEquals(['foo' => 'bar'], $obj->load($this->createFileRef(self::FILE_YML_EMPTY)));
     }
 }

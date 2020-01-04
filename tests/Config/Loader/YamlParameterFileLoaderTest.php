@@ -1,16 +1,14 @@
 <?php
+
 declare(strict_types=1);
 
-
 namespace Syrma\ConfigGenerator\Tests\Config\Loader;
-
 
 use Symfony\Component\Yaml\Parser;
 use Syrma\ConfigGenerator\Config\Loader\YamlParameterFileLoader;
 
 class YamlParameterFileLoaderTest extends AbstractParameterFileLoaderTest
 {
-
     private function createLoader(): YamlParameterFileLoader
     {
         return new YamlParameterFileLoader(new Parser());
@@ -33,7 +31,7 @@ class YamlParameterFileLoaderTest extends AbstractParameterFileLoaderTest
         $yml = $this->createFileRef(self::FILE_YML_ROOT);
         $this->assertEquals([
             'foo' => 'bar',
-            'param' => [1,2,3]
+            'param' => [1, 2, 3],
         ], $this->createLoader()->load($yml)->all());
     }
 
@@ -42,7 +40,7 @@ class YamlParameterFileLoaderTest extends AbstractParameterFileLoaderTest
         $yml = $this->createFileRef(self::FILE_YML_PARAMS);
         $this->assertEquals([
             'bar' => 'foo',
-            'file' => 'param_parameters'
+            'file' => 'param_parameters',
         ], $this->createLoader()->load($yml)->all());
     }
 }

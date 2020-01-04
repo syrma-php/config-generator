@@ -1,20 +1,20 @@
 <?php
-declare(strict_types=1);
 
+declare(strict_types=1);
 
 namespace Syrma\ConfigGenerator\Tests\Definition;
 
-
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Syrma\ConfigGenerator\Config\ConfigFileType;
 
 class ConfigFileTypeTest extends TestCase
 {
-
-    public function testAllMap():void
+    public function testAllMap(): void
     {
-        $ref = new \ReflectionClass(ConfigFileType::class);
-        $typeEnumList = array_filter($ref->getConstants(), static function(string $key){
+        $ref = new ReflectionClass(ConfigFileType::class);
+        $typeEnumList = array_filter($ref->getConstants(), static function (string $key) {
             return 0 === strpos($key, 'TYPE_');
         }, ARRAY_FILTER_USE_KEY);
 
@@ -36,7 +36,7 @@ class ConfigFileTypeTest extends TestCase
 
     public function testWithBadValue(): self
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         ConfigFileType::create('badValue');
     }
 }
