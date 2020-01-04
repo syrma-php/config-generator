@@ -12,6 +12,7 @@ use Syrma\ConfigGenerator\Config\Builder\EnvironmentDefinitionBuilder;
 use Syrma\ConfigGenerator\Config\ConfigDefinition as Def;
 use Syrma\ConfigGenerator\Config\ConfigFileType;
 use Syrma\ConfigGenerator\Config\Definition;
+use Syrma\ConfigGenerator\Config\EnvironmentDefinition;
 use Syrma\ConfigGenerator\Config\Loader\ParameterFileAggregateLoader;
 use Syrma\ConfigGenerator\Exception\InvalidConfigurationException;
 use Syrma\ConfigGenerator\Util\FilesystemToolkit;
@@ -120,9 +121,13 @@ class DefinitionFactory
 
     private function configureOutput(array &$rawDefConfig, EnvironmentDefinitionBuilder $envBuilder): void
     {
-        $envBuilder->setOutputFileName(
-            strtr($rawDefConfig[Def::KEY_ENVIRONMENTS][$envBuilder->getName()][Def::KEY_OUTPUT], $this->createMarkerMap($envBuilder))
-        );
+        $rawOutput = $rawDefConfig[Def::KEY_ENVIRONMENTS][$envBuilder->getName()][Def::KEY_OUTPUT] ?? ($rawDefConfig[Def::KEY_OUTPUT] ?? null);
+
+        if (empty($rawOutput)) {
+            throw new InvalidConfigurationException(sprintf('The output not configured for "%s" environment in "%s" definition!', $envBuilder->getName(), $envBuilder->getDefinitionBuilder()->getId()));
+        }
+
+        $envBuilder->setOutputFileName(strtr($rawOutput, $this->createMarkerMap($envBuilder)));
     }
 
     private function configureParameters(array &$rawConfig, array &$rawDefConfig, EnvironmentDefinitionBuilder $envBuilder): void
@@ -130,9 +135,9 @@ class DefinitionFactory
         $paramFileMap = $this->collectParameterFiles($rawConfig, $rawDefConfig, $envBuilder);
 
         $paramBag = new ParameterBag([
-            'env' => $envBuilder->getName(),
-            'environment' => $envBuilder->getName(),
-            'definition' => $envBuilder->getDefinitionBuilder()->getId(),
+            EnvironmentDefinition::PARAM_ENV => $envBuilder->getName(),
+            EnvironmentDefinition::PARAM_ENVIRONMENT => $envBuilder->getName(),
+            EnvironmentDefinition::PARAM_DEFINITION => $envBuilder->getDefinitionBuilder()->getId(),
         ]);
 
         $paramBag->append($this->paramFileLoader->loadByList(...$paramFileMap[self::SCOPE_DEFAULT]));
@@ -174,9 +179,9 @@ class DefinitionFactory
     private function createMarkerMap(EnvironmentDefinitionBuilder $envBuilder): array
     {
         return [
-            Def::MARKER_DEFINITION => $envBuilder->getName(),
             Def::MARKER_ENV => $envBuilder->getName(),
-            Def::MARKER_ENVIRONMENT => $envBuilder->getDefinitionBuilder()->getId(),
+            Def::MARKER_ENVIRONMENT => $envBuilder->getName(),
+            Def::MARKER_DEFINITION => $envBuilder->getDefinitionBuilder()->getId(),
         ];
     }
 

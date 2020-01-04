@@ -11,6 +11,8 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class ConfigDefinition implements ConfigurationInterface
 {
+    public const KEY_IMPORTS = 'imports';
+    public const KEY_RESOURCE = 'resource';
     public const KEY_DEFAULTS = 'defaults';
     public const KEY_OUTPUT_BASE_PATH = 'outputBasePath';
     public const KEY_DEFINITIONS = 'definitions';
@@ -40,10 +42,30 @@ class ConfigDefinition implements ConfigurationInterface
             // @codeCoverageIgnoreEnd
         }
 
+        $this->addImportSection($rootNode);
         $this->addDefaultSection($rootNode);
         $this->addDefinitionSection($rootNode);
 
         return $treeBuilder;
+    }
+
+    private function addImportSection(ArrayNodeDefinition $root): void
+    {
+        $root
+            ->children()
+                ->arrayNode(self::KEY_IMPORTS)
+                ->info('List of other configuration files.')
+                ->prototype('array')
+                    ->children()
+
+                        ->scalarNode(self::KEY_RESOURCE)
+                            ->info('The other configuration file.'.self::MSG_PATH)
+                        ->end()
+
+                    ->end()
+                ->end()
+            ->end()
+        ->end();
     }
 
     private function addDefaultSection(ArrayNodeDefinition $root): void
@@ -81,6 +103,7 @@ class ConfigDefinition implements ConfigurationInterface
             ->children()
                 ->arrayNode(self::KEY_DEFINITIONS)
                 ->useAttributeAsKey('definitionId')
+                ->normalizeKeys(false)
                 ->prototype('array')
                     ->children()
 
@@ -100,6 +123,10 @@ class ConfigDefinition implements ConfigurationInterface
                             ->info('Output base path for generation. '.self::MSG_PATH.PHP_EOL.'If it is empty then it use default.outputBasePath.'.PHP_EOL.self::MSG_PLACEHOLDERS)
                         ->end()
 
+                        ->scalarNode(self::KEY_OUTPUT)
+                            ->info('Output file name. Absolute file name or relative for '.self::KEY_OUTPUT_BASE_PATH.PHP_EOL.self::MSG_PLACEHOLDERS)
+                        ->end()
+
                         ->arrayNode(self::KEY_PARAMETERS)
                             ->info('Environment independent parameters for this definition.')
                             ->prototype('variable')->end()
@@ -113,14 +140,15 @@ class ConfigDefinition implements ConfigurationInterface
                         ->arrayNode(self::KEY_ENVIRONMENTS)
                             ->info('List of enviroments')
                             ->useAttributeAsKey('envId')
+                            ->normalizeKeys(false)
                             ->requiresAtLeastOneElement()
                             ->prototype('array')
                                 ->children()
 
                                     ->scalarNode(self::KEY_OUTPUT)
-                                        ->info('Output file name. Absolute file name or relative for '.self::KEY_OUTPUT_BASE_PATH.PHP_EOL.self::MSG_PLACEHOLDERS)
-                                        ->isRequired()
-                                        ->cannotBeEmpty()
+                                        ->info('Output file name. Absolute file name or relative for '.self::KEY_OUTPUT_BASE_PATH.
+                                            PHP_EOL.'If it is empty then it use definition.output'.
+                                            PHP_EOL.self::MSG_PLACEHOLDERS)
                                     ->end()
 
                                     ->arrayNode(self::KEY_PARAMETERS)

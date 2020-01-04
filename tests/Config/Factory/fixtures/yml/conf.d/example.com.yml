@@ -1,0 +1,18 @@
+
+definitions:
+    example.com:
+        type: 'nginx'
+        template: '../template/empty.vhost'
+        outputBasePath: '../out'
+        parameters:
+            sessionId: 'ESID'
+        parameterFiles:
+            - '../parameter/example.com.params.yml'
+        environments:
+            live:
+                output: '{{definition}}.vhost'
+                parameters:
+                    accessLog: true
+
+            dev:
+                output: '{{env}}.{{definition}}.vhost'

@@ -58,7 +58,7 @@ LOGO;
     {
         $commands = parent::getDefaultCommands();
 
-        $container = $this->createContainer();
+        $container = self::createContainer();
 
         foreach (array_keys($container->findTaggedServiceIds('command')) as $id) {
             /* @var Command $command */
@@ -69,7 +69,7 @@ LOGO;
         return $commands;
     }
 
-    private function createContainer(): TaggedContainerInterface
+    public static function createContainer(): TaggedContainerInterface
     {
         $containerBuilder = new ContainerBuilder();
         $loader = new PhpFileLoader($containerBuilder, new FileLocator(__DIR__));

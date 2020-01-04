@@ -22,9 +22,6 @@ class ConfigFactory
      */
     private $definitionFactory;
 
-    /**
-     * ConfigFactory constructor.
-     */
     public function __construct(ConfigFileLoaderInterface $configFileLoader, DefinitionFactory $definitionFactory)
     {
         $this->configFileLoader = $configFileLoader;

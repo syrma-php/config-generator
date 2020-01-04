@@ -1,0 +1,14 @@
+imports:
+    - {resource: './conf.d/example.com.yml'}
+    - {resource: './conf.d/hello-world.com.yml'}
+
+
+definitions:
+    hello-world.hu:
+        type: 'nginx'
+        template: 'template/empty.vhost'
+        outputBasePath: './out'
+        output: '{{env}}.{{definition}}.vhost'
+        environments:
+            live: ~
+            dev: ~

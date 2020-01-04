@@ -1,0 +1,20 @@
+
+definitions:
+    hello-world.com:
+        type: 'nginx'
+        template: '../template/empty.vhost'
+        outputBasePath: '../out'
+        output: '{{env}}.{{definition}}.vhost'
+        environments:
+            live: ~
+            dev: ~
+
+    hello-world.eu:
+        type: 'nginx'
+        template: '../template/empty.vhost'
+        outputBasePath: '../out'
+        output: '{{env}}.{{definition}}.vhost'
+        environments:
+            live: ~
+            test: ~
+            dev: ~

@@ -10,6 +10,10 @@ use Syrma\ConfigGenerator\Util\ParameterBag;
 
 class EnvironmentDefinition
 {
+    public const PARAM_ENV = 'env';
+    public const PARAM_ENVIRONMENT = 'environment';
+    public const PARAM_DEFINITION = 'definition';
+
     /**
      * @var string
      */

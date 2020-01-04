@@ -6,6 +6,16 @@ if the developers use the multi environments.
 
 ## Config file reference
 ```
+
+# List of other configuration files.
+imports:
+
+    # Prototype
+    -
+
+        # The other configuration file.Absolute path or relative for this file.
+        resource:             ~
+
 defaults:
 
     # Default output path for generator. Absolute path or relative for this file.
@@ -36,6 +46,10 @@ definitions:
         # Available placeholders in value: {{env}}, {{environment}}, {{definition}}.
         outputBasePath:       ~
 
+        # Output file name. Absolute file name or relative for outputBasePath
+        # Available placeholders in value: {{env}}, {{environment}}, {{definition}}.
+        output:               ~
+
         # Environment independent parameters for this definition.
         parameters:           []
 
@@ -50,8 +64,9 @@ definitions:
             envId:
 
                 # Output file name. Absolute file name or relative for outputBasePath
+                # If it is empty then it use definition.output
                 # Available placeholders in value: {{env}}, {{environment}}, {{definition}}.
-                output:               ~ # Required
+                output:               ~
 
                 # Environment dependent parameters for this env.
                 # The $env, $environment and $definition variables automatic add this config

@@ -33,7 +33,7 @@ class Config
         return array_keys($this->definitions);
     }
 
-    public function getDefinition(string $id): array
+    public function getDefinition(string $id): Definition
     {
         if (isset($this->definitions[$id])) {
             return $this->definitions[$id];

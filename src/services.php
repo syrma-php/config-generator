@@ -63,7 +63,7 @@ return static function (ContainerConfigurator $configurator) {
     ;
 
     $services->set('config.factory', ConfigFactory::class)
-        ->private()
+        ->public()
         ->arg(0, ref('config.file.loader'))
         ->arg(1, ref('config.factory.definition'))
     ;
