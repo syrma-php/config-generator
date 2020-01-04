@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Syrma\ConfigGenerator\Tests\Definition;
+namespace Syrma\ConfigGenerator\Tests\Config;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
