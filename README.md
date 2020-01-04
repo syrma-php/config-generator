@@ -20,7 +20,7 @@ defaults:
 
     # Default output path for generator. Absolute path or relative for this file.
     # Available placeholders in value: {{env}}, {{environment}}, {{definition}}.
-    outputBasePath:       /srv/szicsu/syrma/config-generator
+    outputBasePath:       .
 
     # List of parameters for all definition envs.
     parameters:           []
@@ -36,7 +36,7 @@ definitions:
 
         # Template for current definition. Absolute path or relative for this file.
         # Available placeholders in value: {{env}}, {{environment}}, {{definition}}.
-        template:             ~ # Required
+        template:             ~
 
         # Type of the configuration file
         type:                 ~ # One of "plain"; "ini"; "xml"; "yml"; "cron"; "nginx", Required
@@ -62,6 +62,11 @@ definitions:
 
             # Prototype
             envId:
+
+                # Template for current environment. Absolute file name or relative for template
+                # If it is empty then it use definition.template
+                # Available placeholders in value: {{env}}, {{environment}}, {{definition}}.
+                template:             ~
 
                 # Output file name. Absolute file name or relative for outputBasePath
                 # If it is empty then it use definition.output

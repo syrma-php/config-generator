@@ -109,8 +109,6 @@ class ConfigDefinition implements ConfigurationInterface
 
                         ->scalarNode(self::KEY_TEMPLATE)
                             ->info('Template for current definition. '.self::MSG_PATH.PHP_EOL.self::MSG_PLACEHOLDERS)
-                            ->isRequired()
-                            ->cannotBeEmpty()
                         ->end()
 
                         ->enumNode(self::KEY_TYPE)
@@ -145,6 +143,12 @@ class ConfigDefinition implements ConfigurationInterface
                             ->prototype('array')
                                 ->children()
 
+                                    ->scalarNode(self::KEY_TEMPLATE)
+                                        ->info('Template for current environment. Absolute file name or relative for '. self::KEY_TEMPLATE .
+                                            PHP_EOL .'If it is empty then it use definition.template' .
+                                            PHP_EOL . self::MSG_PLACEHOLDERS
+                                        )
+                                    ->end()
                                     ->scalarNode(self::KEY_OUTPUT)
                                         ->info('Output file name. Absolute file name or relative for '.self::KEY_OUTPUT_BASE_PATH.
                                             PHP_EOL.'If it is empty then it use definition.output'.

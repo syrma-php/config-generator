@@ -87,6 +87,10 @@ class YamlConfigFileLoader implements ConfigFileLoaderInterface
                         if (!empty($envConf[Def::KEY_PARAMETER_FILES])) {
                             $config[Def::KEY_DEFINITIONS][$defId][Def::KEY_ENVIRONMENTS][$envId][Def::KEY_PARAMETER_FILES] = $this->resolvePathValueList((array) $envConf[Def::KEY_PARAMETER_FILES], $rootPath);
                         }
+
+                        if (!empty($envConf[Def::KEY_TEMPLATE])) {
+                            $config[Def::KEY_DEFINITIONS][$defId][Def::KEY_ENVIRONMENTS][$envId][Def::KEY_TEMPLATE] = $this->resolvePathValue($envConf[Def::KEY_TEMPLATE], $rootPath);
+                        }
                     }
                 }
             }

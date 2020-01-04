@@ -97,7 +97,12 @@ class DefinitionFactory
 
     private function configureTemplate(array &$rawDefConfig, EnvironmentDefinitionBuilder $envBuilder): void
     {
-        $template = strtr($rawDefConfig[Def::KEY_TEMPLATE], $this->createMarkerMap($envBuilder));
+        $rawTemplate = $rawDefConfig[Def::KEY_ENVIRONMENTS][$envBuilder->getName()][Def::KEY_TEMPLATE] ?? ($rawDefConfig[Def::KEY_TEMPLATE] ?? null);
+        if (empty($rawTemplate)) {
+            throw new InvalidConfigurationException(sprintf('The template is not configured for "%s" environment in "%s" definition!', $envBuilder->getName(), $envBuilder->getDefinitionBuilder()->getId()));
+        }
+
+        $template = strtr($rawTemplate, $this->createMarkerMap($envBuilder));
         if (false === $this->fs->exists($template)) {
             throw new InvalidConfigurationException(sprintf('The template file "%s" is not exists!', $template));
         }
@@ -124,7 +129,7 @@ class DefinitionFactory
         $rawOutput = $rawDefConfig[Def::KEY_ENVIRONMENTS][$envBuilder->getName()][Def::KEY_OUTPUT] ?? ($rawDefConfig[Def::KEY_OUTPUT] ?? null);
 
         if (empty($rawOutput)) {
-            throw new InvalidConfigurationException(sprintf('The output not configured for "%s" environment in "%s" definition!', $envBuilder->getName(), $envBuilder->getDefinitionBuilder()->getId()));
+            throw new InvalidConfigurationException(sprintf('The output is not configured for "%s" environment in "%s" definition!', $envBuilder->getName(), $envBuilder->getDefinitionBuilder()->getId()));
         }
 
         $envBuilder->setOutputFileName(strtr($rawOutput, $this->createMarkerMap($envBuilder)));
