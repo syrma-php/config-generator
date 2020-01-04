@@ -8,6 +8,7 @@ namespace Syrma\ConfigGenerator\Tests\Config\Loader;
 use Syrma\ConfigGenerator\Config\Loader\ParameterFileLoader;
 use Syrma\ConfigGenerator\Config\Loader\ParameterFileLoaderInterface;
 use Syrma\ConfigGenerator\Exception\NotFoundException;
+use Syrma\ConfigGenerator\Util\ParameterBag;
 
 class ParameterFileLoaderTest extends AbstractParameterFileLoaderTest
 {
@@ -35,7 +36,7 @@ class ParameterFileLoaderTest extends AbstractParameterFileLoaderTest
         });;
         $mock1->expects($this->once())->method('load')->willReturnCallback(function (\SplFileInfo $file){
             $this->assertEquals(self::FILE_YML_EMPTY, $file->getFilename());
-            return ['foo' => 'bar'];
+            return new ParameterBag(['foo' => 'bar']);
         });
 
         $mock2 = $this->getMockBuilder(ParameterFileLoaderInterface::class)->getMock();
@@ -44,6 +45,6 @@ class ParameterFileLoaderTest extends AbstractParameterFileLoaderTest
 
         $obj = new ParameterFileLoader($mock0, $mock1, $mock2);
         $this->assertTrue($obj->isSupported( $this->createFileRef(self::FILE_YML_EMPTY)));
-        $this->assertEquals(['foo' => 'bar'],$obj->load($this->createFileRef(self::FILE_YML_EMPTY)));
+        $this->assertEquals(['foo' => 'bar'],$obj->load($this->createFileRef(self::FILE_YML_EMPTY))->all());
     }
 }

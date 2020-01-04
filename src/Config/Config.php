@@ -7,17 +7,24 @@ namespace Syrma\ConfigGenerator\Config;
 use function array_keys;
 use InvalidArgumentException;
 use function sprintf;
+use Webmozart\Assert\Assert;
 
 class Config
 {
     /**
      * @var array
      */
-    private $definitions;
+    private $definitions = [];
 
+    /**
+     * @param Definition[] $definitions
+     */
     public function __construct(array $definitions)
     {
-        $this->definitions = $definitions;
+        foreach ($definitions as $definition) {
+            Assert::isInstanceOf($definition, Definition::class);
+            $this->definitions[$definition->getId()] = $definition;
+        }
     }
 
     public function getDefinitions(): array

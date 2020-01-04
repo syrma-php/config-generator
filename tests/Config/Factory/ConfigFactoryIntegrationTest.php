@@ -16,6 +16,9 @@ class ConfigFactoryIntegrationTest extends TestCase
     private const YML_TPL_EMPTY = __DIR__ . '/fixtures/yml/template/empty.vhost';
     private const YML_OUT = __DIR__ . '/fixtures/yml/out';
 
+    /**
+     * \@slowThreshold 500
+     */
     public function testYmlHelloWorld(): void
     {
         $config = $this->getConfigFactory()->create(new \SplFileInfo(__DIR__ . '/fixtures/yml/conf.d/hello-world.com.yml'));
@@ -24,6 +27,9 @@ class ConfigFactoryIntegrationTest extends TestCase
         $this->assertHelloWorldDef( $config->getDefinition('hello-world.eu'),'hello-world.eu',['live', 'test', 'dev']);
     }
 
+    /**
+     * \@slowThreshold 500
+     */
     public function testYmlExample(): void
     {
         $config = $this->getConfigFactory()->create(new \SplFileInfo(__DIR__ . '/fixtures/yml/conf.d/example.com.yml'));
@@ -31,6 +37,9 @@ class ConfigFactoryIntegrationTest extends TestCase
         $this->assertExampleComDefinition( $config->getDefinition('example.com'));
     }
 
+    /**
+     * \@slowThreshold 500
+     */
     public function testYmlConfig(): void
     {
         $config = $this->getConfigFactory()->create(new \SplFileInfo(__DIR__ . '/fixtures/yml/config.yml'));

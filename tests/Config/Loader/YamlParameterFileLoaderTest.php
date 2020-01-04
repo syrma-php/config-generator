@@ -24,8 +24,8 @@ class YamlParameterFileLoaderTest extends AbstractParameterFileLoaderTest
         $this->assertTrue($this->createLoader()->isSupported($yml));
         $this->assertTrue($this->createLoader()->isSupported($yaml));
 
-        $this->assertEquals([], $this->createLoader()->load($yml));
-        $this->assertEquals([], $this->createLoader()->load($yaml));
+        $this->assertEquals([], $this->createLoader()->load($yml)->all());
+        $this->assertEquals([], $this->createLoader()->load($yaml)->all());
     }
 
     public function testLoadDataFromRoot(): void
@@ -34,7 +34,7 @@ class YamlParameterFileLoaderTest extends AbstractParameterFileLoaderTest
         $this->assertEquals([
             'foo' => 'bar',
             'param' => [1,2,3]
-        ], $this->createLoader()->load($yml));
+        ], $this->createLoader()->load($yml)->all());
     }
 
     public function testLoadDataFromParameters(): void
@@ -43,6 +43,6 @@ class YamlParameterFileLoaderTest extends AbstractParameterFileLoaderTest
         $this->assertEquals([
             'bar' => 'foo',
             'file' => 'param_parameters'
-        ], $this->createLoader()->load($yml));
+        ], $this->createLoader()->load($yml)->all());
     }
 }
