@@ -40,6 +40,9 @@
             "Syrma\\ConfigGenerator\\Tests\\": "tests/"
         }
     },
+    "bin": [
+        "bin/config-generator"
+    ],
     "scripts": {
         "test": "phpunit"
     }
