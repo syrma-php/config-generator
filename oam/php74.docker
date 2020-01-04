@@ -1,0 +1,9 @@
+FROM php:7.4-cli-alpine3.11
+
+ADD "https://getcomposer.org/download/1.8.6/composer.phar" "/usr/local/bin/composer"
+
+RUN apk add --no-cache  make  \
+    && docker-php-ext-install pcntl \
+    && chmod +x "/usr/local/bin/composer" && chmod +r "/usr/local/bin/composer"
+
+WORKDIR /srv

@@ -3,7 +3,7 @@
     "description": "Tool for config management",
     "type": "project",
     "require": {
-        "php": "^7.2",
+        "php": "^7.1",
         "ocramius/package-versions": "^1.4",
         "symfony/yaml": "3.4.*|4.4.*",
         "symfony/templating": "3.4.*|4.4.*",

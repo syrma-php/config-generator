@@ -1,0 +1,10 @@
+FROM alpine:3.11
+
+ADD "https://getcomposer.org/download/1.8.6/composer.phar" "/usr/local/bin/composer"
+
+RUN apk add --no-cache  make php7 php7-common php7-ctype php7-dom php7-xml php7-mcrypt php7-xsl php7-mbstring php7-openssl php7-zip \
+                        php7-phar php7-json php7-tokenizer php7-xmlwriter php7-simplexml php7-xmlreader php7-fileinfo php7-pcntl \
+    && ln -s /usr/bin/php7 /usr/local/bin/php \
+    && chmod +x "/usr/local/bin/composer" && chmod +r "/usr/local/bin/composer"
+
+WORKDIR /srv
