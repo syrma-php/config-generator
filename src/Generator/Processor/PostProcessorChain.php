@@ -1,9 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
-
 namespace Syrma\ConfigGenerator\Generator\Processor;
-
 
 use Syrma\ConfigGenerator\Generator\GeneratorContext;
 
@@ -24,8 +23,8 @@ class PostProcessorChain implements PostProcessorInterface
 
     public function isSupported(GeneratorContext $context): bool
     {
-        foreach ( $this->processes as $proc ){
-            if( true === $proc->isSupported($context) ){
+        foreach ($this->processes as $proc) {
+            if (true === $proc->isSupported($context)) {
                 return true;
             }
         }
@@ -35,9 +34,8 @@ class PostProcessorChain implements PostProcessorInterface
 
     public function process(string $content, GeneratorContext $context): string
     {
-        foreach ($this->processes as $proc ){
-
-            if( true === $proc->isSupported($context) ){
+        foreach ($this->processes as $proc) {
+            if (true === $proc->isSupported($context)) {
                 $content = $proc->process($content, $context);
             }
         }

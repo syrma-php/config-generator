@@ -33,12 +33,6 @@ class Generator
      */
     private $postProcessor;
 
-    /**
-     * @param Filesystem $fs
-     * @param EngineInterface $engine
-     * @param HeaderGeneratorInterface $headerGenerator
-     * @param PostProcessorInterface $postProcessor
-     */
     public function __construct(Filesystem $fs, EngineInterface $engine, HeaderGeneratorInterface $headerGenerator, PostProcessorInterface $postProcessor)
     {
         $this->fs = $fs;
@@ -66,6 +60,7 @@ class Generator
     {
         $env = $context->getEnvironment();
         $content = $this->engine->render($env->getTemplate(), $env->getParameters()->all());
+
         return $this->postProcessor->process($content, $context);
     }
 

@@ -104,18 +104,12 @@ class DefinitionFactory
     {
         $rawTemplate = $rawDefConfig[Def::KEY_ENVIRONMENTS][$envBuilder->getName()][Def::KEY_TEMPLATE] ?? ($rawDefConfig[Def::KEY_TEMPLATE] ?? null);
         if (empty($rawTemplate)) {
-            throw new InvalidConfigurationException(
-                sprintf('The template is not configured for "%s" environment in "%s" definition!', $envBuilder->getName(), $envBuilder->getDefinitionBuilder()->getId()),
-                self::EX_CODE_TEMPLATE_EMPTY
-            );
+            throw new InvalidConfigurationException(sprintf('The template is not configured for "%s" environment in "%s" definition!', $envBuilder->getName(), $envBuilder->getDefinitionBuilder()->getId()), self::EX_CODE_TEMPLATE_EMPTY);
         }
 
         $template = strtr($rawTemplate, $this->createMarkerMap($envBuilder));
         if (false === $this->fs->exists($template)) {
-            throw new InvalidConfigurationException(
-                sprintf('The template file "%s" is not exists!', $template),
-                self::EX_CODE_TEMPLATE_IS_NOT_EXISTS
-            );
+            throw new InvalidConfigurationException(sprintf('The template file "%s" is not exists!', $template), self::EX_CODE_TEMPLATE_IS_NOT_EXISTS);
         }
 
         $envBuilder->setTemplate($this->templateNameParser->parse($template));
@@ -140,10 +134,7 @@ class DefinitionFactory
         $rawOutput = $rawDefConfig[Def::KEY_ENVIRONMENTS][$envBuilder->getName()][Def::KEY_OUTPUT] ?? ($rawDefConfig[Def::KEY_OUTPUT] ?? null);
 
         if (empty($rawOutput)) {
-            throw new InvalidConfigurationException(
-                sprintf('The output is not configured for "%s" environment in "%s" definition!', $envBuilder->getName(), $envBuilder->getDefinitionBuilder()->getId()),
-                self::EX_CODE_OUTPUT_EMPTY
-            );
+            throw new InvalidConfigurationException(sprintf('The output is not configured for "%s" environment in "%s" definition!', $envBuilder->getName(), $envBuilder->getDefinitionBuilder()->getId()), self::EX_CODE_OUTPUT_EMPTY);
         }
 
         $envBuilder->setOutputFileName(strtr($rawOutput, $this->createMarkerMap($envBuilder)));
@@ -209,10 +200,7 @@ class DefinitionFactory
         $fileName = strtr($rawFileName, $markerMap);
 
         if (false === $this->fs->exists($fileName)) {
-            throw new InvalidConfigurationException(
-                sprintf('The parameter file "%s" is not exists!', $fileName),
-                self::EX_CODE_PARAM_FILE_IS_NOT_EXISTS
-            );
+            throw new InvalidConfigurationException(sprintf('The parameter file "%s" is not exists!', $fileName), self::EX_CODE_PARAM_FILE_IS_NOT_EXISTS);
         }
 
         return new SplFileInfo($fileName);

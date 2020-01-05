@@ -144,9 +144,9 @@ class ConfigDefinition implements ConfigurationInterface
                                 ->children()
 
                                     ->scalarNode(self::KEY_TEMPLATE)
-                                        ->info('Template for current environment. Absolute file name or relative for '. self::KEY_TEMPLATE .
-                                            PHP_EOL .'If it is empty then it use definition.template' .
-                                            PHP_EOL . self::MSG_PLACEHOLDERS
+                                        ->info('Template for current environment. Absolute file name or relative for '.self::KEY_TEMPLATE.
+                                            PHP_EOL.'If it is empty then it use definition.template'.
+                                            PHP_EOL.self::MSG_PLACEHOLDERS
                                         )
                                     ->end()
                                     ->scalarNode(self::KEY_OUTPUT)

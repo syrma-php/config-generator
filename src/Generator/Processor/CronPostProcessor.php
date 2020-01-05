@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare(strict_types=1);
 
 namespace Syrma\ConfigGenerator\Generator\Processor;
 
@@ -16,6 +16,6 @@ class CronPostProcessor implements PostProcessorInterface
 
     public function process(string $content, GeneratorContext $context): string
     {
-        return $content . PHP_EOL;
+        return $content.PHP_EOL;
     }
 }

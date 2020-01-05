@@ -1,9 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
-
 namespace Syrma\ConfigGenerator\Tests\Generator\Processor;
-
 
 use PHPUnit\Framework\TestCase;
 use Syrma\ConfigGenerator\Generator\GeneratorContext;
@@ -12,7 +11,7 @@ use Syrma\ConfigGenerator\Generator\Processor\PostProcessorInterface;
 
 class PostProcessorChainTest extends TestCase
 {
-    public function testEmpty():void
+    public function testEmpty(): void
     {
         $context = $this->getMockBuilder(GeneratorContext::class)
             ->disableOriginalConstructor()
@@ -32,8 +31,8 @@ class PostProcessorChainTest extends TestCase
             ->willReturn(true);
 
         $proc0->expects($this->once())->method('process')
-            ->willReturnCallback(static function(string $content, GeneratorContext $context){
-                return $content . '-PROC0';
+            ->willReturnCallback(static function (string $content, GeneratorContext $context) {
+                return $content.'-PROC0';
             })
         ;
 
@@ -48,8 +47,8 @@ class PostProcessorChainTest extends TestCase
             ->willReturn(true);
 
         $proc2->expects($this->once())->method('process')
-            ->willReturnCallback(static function(string $content, GeneratorContext $context){
-                return $content . '-PROC2';
+            ->willReturnCallback(static function (string $content, GeneratorContext $context) {
+                return $content.'-PROC2';
             })
         ;
 
@@ -61,5 +60,4 @@ class PostProcessorChainTest extends TestCase
         $this->assertTrue($proc->isSupported($context));
         $this->assertSame('foo-PROC0-PROC2', $proc->process('foo', $context));
     }
-
 }

@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Syrma\ConfigGenerator;
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Syrma\ConfigGenerator\Generator\Processor\CronPostProcessor;
-use Syrma\ConfigGenerator\Generator\Processor\PostProcessorChain;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\inline;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
 use Symfony\Component\Filesystem\Filesystem;
@@ -33,6 +31,8 @@ use Syrma\ConfigGenerator\Generator\HeaderGenerator\HashTagBaseHeaderGenerator;
 use Syrma\ConfigGenerator\Generator\HeaderGenerator\HeaderGenerator;
 use Syrma\ConfigGenerator\Generator\HeaderGenerator\IniHeaderGenerator;
 use Syrma\ConfigGenerator\Generator\HeaderGenerator\XmlHeaderGenerator;
+use Syrma\ConfigGenerator\Generator\Processor\CronPostProcessor;
+use Syrma\ConfigGenerator\Generator\Processor\PostProcessorChain;
 
 return static function (ContainerConfigurator $configurator) {
     $services = $configurator->services();

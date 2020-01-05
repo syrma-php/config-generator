@@ -1,6 +1,6 @@
 <?php
-declare(strict_types=1);
 
+declare(strict_types=1);
 
 namespace Syrma\ConfigGenerator\Tests\Generator\Processor;
 
@@ -23,12 +23,12 @@ class CronPostProcessorTest extends TestCase
     {
         $proc = new CronPostProcessor();
         $this->assertSame(
-            'Foo' . PHP_EOL,
+            'Foo'.PHP_EOL,
             $proc->process('Foo', $this->createContext(ConfigFileType::TYPE_CRON))
         );
     }
 
-    protected function createContext( string $type): GeneratorContext
+    protected function createContext(string $type): GeneratorContext
     {
         $def = $this->getMockBuilder(Definition::class)
             ->disableOriginalConstructor()
@@ -42,5 +42,4 @@ class CronPostProcessorTest extends TestCase
 
         return $context;
     }
-
 }
