@@ -9,6 +9,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Templating\EngineInterface;
 use Syrma\ConfigGenerator\Exception\InvalidStateException;
 use Syrma\ConfigGenerator\Generator\HeaderGenerator\HeaderGeneratorInterface;
+use Syrma\ConfigGenerator\Generator\Processor\PostProcessorInterface;
 
 class Generator
 {
@@ -27,11 +28,23 @@ class Generator
      */
     private $headerGenerator;
 
-    public function __construct(Filesystem $fs, EngineInterface $engine, HeaderGeneratorInterface $headerGenerator)
+    /**
+     * @var PostProcessorInterface
+     */
+    private $postProcessor;
+
+    /**
+     * @param Filesystem $fs
+     * @param EngineInterface $engine
+     * @param HeaderGeneratorInterface $headerGenerator
+     * @param PostProcessorInterface $postProcessor
+     */
+    public function __construct(Filesystem $fs, EngineInterface $engine, HeaderGeneratorInterface $headerGenerator, PostProcessorInterface $postProcessor)
     {
         $this->fs = $fs;
         $this->engine = $engine;
         $this->headerGenerator = $headerGenerator;
+        $this->postProcessor = $postProcessor;
     }
 
     public function generate(GeneratorContext $context): void
@@ -52,8 +65,8 @@ class Generator
     private function generateContent(GeneratorContext $context): string
     {
         $env = $context->getEnvironment();
-
-        return $this->engine->render($env->getTemplate(), $env->getParameters()->all());
+        $content = $this->engine->render($env->getTemplate(), $env->getParameters()->all());
+        return $this->postProcessor->process($content, $context);
     }
 
     private function generateHeader(string $content, GeneratorContext $context): string

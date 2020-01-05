@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Syrma\ConfigGenerator;
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Syrma\ConfigGenerator\Generator\Processor\CronPostProcessor;
+use Syrma\ConfigGenerator\Generator\Processor\PostProcessorChain;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\inline;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
 use Symfony\Component\Filesystem\Filesystem;
@@ -103,6 +105,7 @@ return static function (ContainerConfigurator $configurator) {
         ->arg(0, ref('symfony.filesystem'))
         ->arg(1, ref('symfony.templating.engine'))
         ->arg(2, ref('generator.header'))
+        ->arg(3, ref('generator.processor.post_processor.chain'))
     ;
 
     $services->set('generator.header', HeaderGenerator::class)
@@ -111,6 +114,11 @@ return static function (ContainerConfigurator $configurator) {
         ->arg(1, inline(HashTagBaseHeaderGenerator::class))
         ->arg(2, inline(IniHeaderGenerator::class))
         ->arg(3, inline(XmlHeaderGenerator::class))
+    ;
+
+    $services->set('generator.processor.post_processor.chain', PostProcessorChain::class)
+        ->private()
+        ->arg(0, inline(CronPostProcessor::class))
     ;
 
     /*************** SYMFONY *********************/
