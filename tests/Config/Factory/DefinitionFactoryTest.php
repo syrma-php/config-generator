@@ -44,6 +44,7 @@ class DefinitionFactoryTest extends TestCase
         $this->assertEquals( $basePath . '/live.def0.tpl' , $live->getTemplate()->getLogicalName());
         $this->assertEquals($basePath, $live->getOutputPath());
         $this->assertEquals('live.def0.conf', $live->getOutputFileName());
+        $this->assertEquals($basePath . '/live.def0.conf', $live->getOutputFile());
         $this->assertEquals($this->buildDefaultParameters('def0', 'live'), $live->getParameters()->all());
 
         $dev = $envMap['dev'];
@@ -52,6 +53,7 @@ class DefinitionFactoryTest extends TestCase
         $this->assertEquals( $basePath . '/dev.def0.tpl' , $dev->getTemplate()->getLogicalName());
         $this->assertEquals($basePath , $dev->getOutputPath());
         $this->assertEquals('dev/dev.def0.conf', $dev->getOutputFileName());
+        $this->assertEquals($basePath . '/dev/dev.def0.conf', $dev->getOutputFile());
         $this->assertEquals($this->buildDefaultParameters('def0', 'dev'), $dev->getParameters()->all());
 
 
@@ -67,6 +69,7 @@ class DefinitionFactoryTest extends TestCase
         $this->assertEquals( $basePath . '/prod.def1.tpl' , $prod->getTemplate()->getLogicalName());
         $this->assertEquals($basePath.'/out', $prod->getOutputPath());
         $this->assertEquals('prod.def1.conf', $prod->getOutputFileName());
+        $this->assertEquals($basePath . '/out/prod.def1.conf', $prod->getOutputFile());
         $this->assertEquals($this->buildDefaultParameters('def1', 'prod'), $prod->getParameters()->all());
 
         $test = $envMap['test'];
