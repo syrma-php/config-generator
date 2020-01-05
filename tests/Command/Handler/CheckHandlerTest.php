@@ -1,10 +1,10 @@
 <?php
-declare(strict_types=1);
 
+declare(strict_types=1);
 
 namespace Syrma\ConfigGenerator\Tests\Command\Handler;
 
-
+use Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Syrma\ConfigGenerator\Command\Handler\CheckHandler;
@@ -17,7 +17,7 @@ use Syrma\ConfigGenerator\Generator\GeneratorContext;
 
 class CheckHandlerTest extends TestCase
 {
-    public function testHandle():void
+    public function testHandle(): void
     {
         $env = $this->getMockBuilder(EnvironmentDefinition::class)
             ->disableOriginalConstructor()
@@ -38,7 +38,7 @@ class CheckHandlerTest extends TestCase
         $generator
             ->expects($this->exactly(6))
             ->method('check')
-            ->with( $this->isInstanceOf(GeneratorContext::class))
+            ->with($this->isInstanceOf(GeneratorContext::class))
         ;
 
         $handler = new CheckHandler($generator, new GeneratorContextFactory());
@@ -51,7 +51,7 @@ class CheckHandlerTest extends TestCase
         $this->assertFalse($result);
     }
 
-    public function testHandleWithError():void
+    public function testHandleWithError(): void
     {
         $env = $this->getMockBuilder(EnvironmentDefinition::class)
             ->disableOriginalConstructor()
@@ -72,12 +72,11 @@ class CheckHandlerTest extends TestCase
         $generator
             ->expects($this->exactly(6))
             ->method('check')
-            ->willReturnCallback(static function(GeneratorContext $context){
-                if( 'def1' === $context->getDefinition()->getId() ){
-                    throw new \Exception('Dummy');
+            ->willReturnCallback(static function (GeneratorContext $context) {
+                if ('def1' === $context->getDefinition()->getId()) {
+                    throw new Exception('Dummy');
                 }
             });
-
 
         $handler = new CheckHandler($generator, new GeneratorContextFactory());
         $result = $handler->handle([

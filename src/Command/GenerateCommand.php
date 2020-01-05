@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Syrma\ConfigGenerator\Command;
 
-use Syrma\ConfigGenerator\Command\Handler\CheckHandler;
-use Syrma\ConfigGenerator\Command\Handler\GenerateHandler;
-use Syrma\ConfigGenerator\Util\FilesystemToolkit;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Syrma\ConfigGenerator\Command\Handler\CheckHandler;
+use Syrma\ConfigGenerator\Command\Handler\GenerateHandler;
 use Syrma\ConfigGenerator\Config\Factory\ConfigFactory;
+use Syrma\ConfigGenerator\Util\FilesystemToolkit;
 
 class GenerateCommand extends Command
 {

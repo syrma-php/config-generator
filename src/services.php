@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Syrma\ConfigGenerator;
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Syrma\ConfigGenerator\Command\Handler\CheckHandler;
-use Syrma\ConfigGenerator\Command\Handler\GenerateHandler;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\inline;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
 use Symfony\Component\Filesystem\Filesystem;
@@ -18,6 +16,8 @@ use Symfony\Component\Templating\TemplateNameParser;
 use Symfony\Component\Yaml\Parser;
 use Syrma\ConfigGenerator\Command\DumpReferenceCommand;
 use Syrma\ConfigGenerator\Command\GenerateCommand;
+use Syrma\ConfigGenerator\Command\Handler\CheckHandler;
+use Syrma\ConfigGenerator\Command\Handler\GenerateHandler;
 use Syrma\ConfigGenerator\Config\Factory\ConfigFactory;
 use Syrma\ConfigGenerator\Config\Factory\DefinitionBuilderFactory;
 use Syrma\ConfigGenerator\Config\Factory\DefinitionFactory;

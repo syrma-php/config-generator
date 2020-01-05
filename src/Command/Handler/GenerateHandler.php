@@ -1,10 +1,10 @@
 <?php
-declare(strict_types=1);
 
+declare(strict_types=1);
 
 namespace Syrma\ConfigGenerator\Command\Handler;
 
-
+use Exception;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Syrma\ConfigGenerator\Config\Definition;
 use Syrma\ConfigGenerator\Generator\Builder\GeneratorContextFactory;
@@ -30,7 +30,7 @@ class GenerateHandler
 
     /**
      * @param Definition[] $definitionList
-     * @param SymfonyStyle $io - for console writing
+     * @param SymfonyStyle $io             - for console writing
      */
     public function handle(array $definitionList, SymfonyStyle $io): void
     {
@@ -43,7 +43,7 @@ class GenerateHandler
                 try {
                     $this->generator->generate($this->contextFactory->createContext($io, $definition, $env));
                     $io->writeln(' <comment>OK</comment>');
-                } catch (\Exception $ex) {
+                } catch (Exception $ex) {
                     $io->writeln(sprintf('<error>Error: %s</error>', $ex->getMessage()));
                 }
             }
