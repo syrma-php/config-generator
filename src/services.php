@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Syrma\ConfigGenerator;
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Syrma\ConfigGenerator\Command\Handler\CheckHandler;
+use Syrma\ConfigGenerator\Command\Handler\GenerateHandler;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\inline;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
 use Symfony\Component\Filesystem\Filesystem;
@@ -40,15 +42,26 @@ return static function (ContainerConfigurator $configurator) {
     $services->set('command.generator', GenerateCommand::class)
         ->public()
         ->arg(0, ref('config.factory'))
-        ->arg(1, ref('generator.generator'))
-        ->arg(2, ref('symfony.filesystem'))
-        ->arg(3, ref('generator.context.factory'))
+        ->arg(1, ref('command.handler.check'))
+        ->arg(2, ref('command.handler.generate'))
         ->tag('command')
     ;
 
     $services->set('command.dump-reference', DumpReferenceCommand::class)
         ->public()
         ->tag('command')
+    ;
+
+    $services->set('command.handler.check', CheckHandler::class)
+        ->private()
+        ->arg(0, ref('generator.generator'))
+        ->arg(1, ref('generator.context.factory'))
+    ;
+
+    $services->set('command.handler.generate', GenerateHandler::class)
+        ->private()
+        ->arg(0, ref('generator.generator'))
+        ->arg(1, ref('generator.context.factory'))
     ;
 
     /*************** CONFIG *********************/

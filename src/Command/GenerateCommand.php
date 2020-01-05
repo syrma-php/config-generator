@@ -4,29 +4,23 @@ declare(strict_types=1);
 
 namespace Syrma\ConfigGenerator\Command;
 
-use const DIRECTORY_SEPARATOR;
-use Exception;
-use SplFileInfo;
-use function sprintf;
+use Syrma\ConfigGenerator\Command\Handler\CheckHandler;
+use Syrma\ConfigGenerator\Command\Handler\GenerateHandler;
+use Syrma\ConfigGenerator\Util\FilesystemToolkit;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Filesystem\Filesystem;
-use Syrma\ConfigGenerator\Config\Definition;
 use Syrma\ConfigGenerator\Config\Factory\ConfigFactory;
-use Syrma\ConfigGenerator\Exception\NotFoundException;
-use Syrma\ConfigGenerator\Generator\Builder\GeneratorContextFactory;
-use Syrma\ConfigGenerator\Generator\Generator;
 
 class GenerateCommand extends Command
 {
     private const ARG_DEFINITION_FILE = 'definitionFile';
     private const OPT_DRY_RUN = 'dry-run';
     private const OPT_FORCE = 'force';
-    public const OPT_DEFINITION = 'definition';
+    private const OPT_DEFINITION = 'definition';
 
     /**
      * @var ConfigFactory
@@ -34,30 +28,21 @@ class GenerateCommand extends Command
     private $configFactory;
 
     /**
-     * @var Generator
+     * @var CheckHandler
      */
-    private $generator;
+    private $checkHandler;
 
     /**
-     * @var Filesystem
+     * @var GenerateHandler
      */
-    private $fs;
+    private $generateHandler;
 
-    /**
-     * @var GeneratorContextFactory
-     */
-    private $contextFactory;
-
-    /**
-     * GenerateCommand constructor.
-     */
-    public function __construct(ConfigFactory $configFactory, Generator $generator, Filesystem $fs, GeneratorContextFactory $contextFactory)
+    public function __construct(ConfigFactory $configFactory, CheckHandler $checkHandler, GenerateHandler $generateHandler)
     {
         parent::__construct();
         $this->configFactory = $configFactory;
-        $this->generator = $generator;
-        $this->fs = $fs;
-        $this->contextFactory = $contextFactory;
+        $this->checkHandler = $checkHandler;
+        $this->generateHandler = $generateHandler;
     }
 
     protected function configure()
@@ -77,80 +62,21 @@ class GenerateCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
-        $config = $this->configFactory->create($this->resolveConfigFile($input->getArgument(self::ARG_DEFINITION_FILE)));
+        $config = $this->configFactory->create(FilesystemToolkit::resolveFile($input->getArgument(self::ARG_DEFINITION_FILE)));
 
         $definitionList = !empty($definitionId = $input->getOption(self::OPT_DEFINITION)) ?
             [$config->getDefinition($definitionId)] : $config->getDefinitions();
 
-        if (false === $input->getOption(self::OPT_FORCE) && true === $this->executeCheck($definitionList, $io)) {
+        if (false === $input->getOption(self::OPT_FORCE) && true === $this->checkHandler->handle($definitionList, $io)) {
             return 1;
         }
 
         $io->writeln('');
 
         if (false === $input->getOption(self::OPT_DRY_RUN)) {
-            $this->executeGenerate($definitionList, $io);
+            $this->generateHandler->handle($definitionList, $io);
         }
 
         return 0;
-    }
-
-    private function resolveConfigFile(string $fileName): SplFileInfo
-    {
-        $files = [
-            $fileName,
-            getcwd().DIRECTORY_SEPARATOR.$fileName,
-        ];
-
-        foreach ($files as $file) {
-            if ($this->fs->exists($file)) {
-                return new SplFileInfo($file);
-            }
-        }
-
-        throw new NotFoundException(sprintf('Not found the config file: %s', $fileName));
-    }
-
-    private function executeCheck(array $definitionList, SymfonyStyle $io): bool
-    {
-        $hasProblem = false;
-
-        /** @var Definition[] $definitionList */
-        foreach ($definitionList as $definition) {
-            $io->writeln(sprintf('Start checking <info>%s</info> definition environments:', $definition->getId()));
-
-            foreach ($definition->getEnvironmentMap() as $env) {
-                $io->write(sprintf('    <info>%s</info> environment ...', $env->getName()));
-
-                try {
-                    $this->generator->check($this->contextFactory->createContext($io, $definition, $env));
-                    $io->writeln(' <comment>OK</comment>');
-                } catch (Exception $ex) {
-                    $io->writeln(sprintf('<error> Error: %s</error>', $ex->getMessage()));
-                    $hasProblem = true;
-                }
-            }
-        }
-
-        return $hasProblem;
-    }
-
-    private function executeGenerate(array $definitionList, SymfonyStyle $io): void
-    {
-        /** @var Definition[] $definitionList */
-        foreach ($definitionList as $definition) {
-            $io->writeln(sprintf('Start generating <info>%s</info> definition environments:', $definition->getId()));
-
-            foreach ($definition->getEnvironmentMap() as $env) {
-                $io->write(sprintf('    <info>%s</info> environment ...', $env->getName()));
-
-                try {
-                    $this->generator->generate($this->contextFactory->createContext($io, $definition, $env));
-                    $io->writeln(' <comment>OK</comment>');
-                } catch (Exception $ex) {
-                    $io->writeln(sprintf('<error>Error: %s</error>', $ex->getMessage()));
-                }
-            }
-        }
     }
 }
