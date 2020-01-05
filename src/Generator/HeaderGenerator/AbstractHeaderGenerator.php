@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Syrma\ConfigGenerator\Generator\HeaderGenerator;
 
+use function count;
 use function in_array;
+use Syrma\ConfigGenerator\Exception\InvalidStateException;
 use Syrma\ConfigGenerator\Exception\NotFoundException;
 use Syrma\ConfigGenerator\Generator\GeneratorContext;
 
@@ -18,6 +20,13 @@ abstract class AbstractHeaderGenerator implements HeaderGeneratorInterface
     protected const MARKER_HASH = '{{hash}}';
     protected const MARKER_DEFINITION = '{{definition}}';
     protected const MARKER_ENV = '{{env}}';
+
+    /**
+     * @return string[]
+     */
+    abstract protected function getSupportedTypes(): array;
+
+    abstract protected function wrapLine(string $line): string;
 
     public function isSupported(GeneratorContext $context): bool
     {
@@ -35,19 +44,22 @@ abstract class AbstractHeaderGenerator implements HeaderGeneratorInterface
         ]);
     }
 
-    public function generateHash(string $configContent, GeneratorContext $context): string
-    {
-        return  base_convert(hash('sha256', $configContent), 16, 36);
-    }
-
     public function isModified(string $oldConfigFileContent, GeneratorContext $context): bool
     {
-        [,$oldContent] = explode($this->wrapLine(self::TPL_END_HEADER).PHP_EOL, $oldConfigFileContent, 2);
+        $parts = explode($this->wrapLine(self::TPL_END_HEADER).PHP_EOL, $oldConfigFileContent, 2);
+        if (2 !== count($parts)) {
+            throw new InvalidStateException('The configuration not contains the "'.self::TPL_END_HEADER.'" string!');
+        }
 
         $oldHash = $this->guessHash($oldConfigFileContent, $context);
-        $newHash = $this->generateHash($oldContent, $context);
+        $newHash = $this->generateHash($parts[1], $context);
 
         return $oldHash !== $newHash;
+    }
+
+    protected function generateHash(string $configContent, GeneratorContext $context): string
+    {
+        return  base_convert(hash('sha256', $configContent), 16, 36);
     }
 
     protected function guessHash(string $configFileContent, GeneratorContext $context): string
@@ -60,13 +72,6 @@ abstract class AbstractHeaderGenerator implements HeaderGeneratorInterface
 
         return $matches['hash'];
     }
-
-    /**
-     * @return string[]
-     */
-    abstract protected function getSupportedTypes(): array;
-
-    abstract protected function wrapLine(string $line): string;
 
     protected function generateHashText(string $configContent, GeneratorContext $context): string
     {

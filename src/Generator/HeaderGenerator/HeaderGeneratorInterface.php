@@ -12,7 +12,5 @@ interface HeaderGeneratorInterface
 
     public function generateHeader(string $configContent, GeneratorContext $context): string;
 
-    public function generateHash(string $configContent, GeneratorContext $context): string;
-
     public function isModified(string $oldConfigFileContent, GeneratorContext $context): bool;
 }

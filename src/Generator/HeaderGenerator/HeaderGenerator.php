@@ -38,11 +38,6 @@ class HeaderGenerator implements HeaderGeneratorInterface
         return $this->getGenerator($context)->generateHeader($configContent, $context);
     }
 
-    public function generateHash(string $configContent, GeneratorContext $context): string
-    {
-        return $this->getGenerator($context)->generateHash($configContent, $context);
-    }
-
     public function isModified(string $oldConfigFileContent, GeneratorContext $context): bool
     {
         return $this->getGenerator($context)->isModified($oldConfigFileContent, $context);
