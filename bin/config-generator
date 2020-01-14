@@ -6,20 +6,32 @@ declare(strict_types=1);
 use Syrma\ConfigGenerator\Application;
 
 (static function () {
-    $file = null;
-    foreach ([__DIR__.'/../../autoload.php', __DIR__.'/../autoload.php', __DIR__.'/../vendor/autoload.php'] as $possibleFile) {
-        if (file_exists($possibleFile)) {
-            $file = $possibleFile;
-
-            break;
+    $require = true;
+    if (class_exists('Phar')) {
+        try {
+            Phar::mapPhar('config-generator.phar');
+            require_once 'phar://config-generator.phar/vendor/autoload.php';
+            $require = false;
+        } catch (PharException $e) {
         }
     }
 
-    if (null === $file) {
-        throw new RuntimeException('Unable to locate autoload.php file.');
-    }
+    if ($require) {
+        $possibleFiles = [__DIR__.'/../../../autoload.php', __DIR__.'/../../autoload.php', __DIR__.'/../vendor/autoload.php'];
+        $file = null;
+        foreach ($possibleFiles as $possibleFile) {
+            if (file_exists($possibleFile)) {
+                $file = $possibleFile;
 
-    require_once $file;
+                break;
+            }
+        }
+
+        if (null === $file) {
+            throw new RuntimeException('Unable to locate autoload.php file.');
+        }
+        require_once $file;
+    }
 })();
 
 $app = new Application('@release-date@');
