@@ -42,7 +42,7 @@ class YamlConfigFileLoader implements ConfigFileLoaderInterface
             return; // it was loaded
         }
 
-        $config = $this->parser->parseFile($file->getPathname());
+        $config = (array) $this->parser->parseFile($file->getPathname());
         $this->resolvePath($config, $file->getPath());
 
         $importPool = [];
@@ -69,7 +69,7 @@ class YamlConfigFileLoader implements ConfigFileLoaderInterface
         }
 
         if (!empty($config[Def::KEY_DEFAULTS][Def::KEY_PARAMETER_FILES])) {
-            $config[Def::KEY_DEFAULTS][Def::KEY_PARAMETER_FILES] = $this->resolvePathValueList((array)$config[Def::KEY_DEFAULTS][Def::KEY_PARAMETER_FILES], $rootPath);
+            $config[Def::KEY_DEFAULTS][Def::KEY_PARAMETER_FILES] = $this->resolvePathValueList((array) $config[Def::KEY_DEFAULTS][Def::KEY_PARAMETER_FILES], $rootPath);
         }
 
         if (!empty($config[Def::KEY_DEFINITIONS])) {
