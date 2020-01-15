@@ -39,7 +39,7 @@ definitions:
         template:             ~
 
         # Type of the configuration file
-        type:                 ~ # One of "plain"; "ini"; "xml"; "yml"; "cron"; "nginx", Required
+        type:                 ~ # One of "plain"; "ini"; "xml"; "yml"; "cron"; "nginx"; "php", Required
 
         # Output base path for generation. Absolute path or relative for this file.
         # If it is empty then it use default.outputBasePath.

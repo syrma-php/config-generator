@@ -16,6 +16,7 @@ class ConfigFileType
 
     public const TYPE_CRON = 'cron';
     public const TYPE_NGINX = 'nginx';
+    public const TYPE_PHP = 'php';
 
     public const ALL = [
         self::TYPE_PLAIN,
@@ -25,6 +26,7 @@ class ConfigFileType
 
         self::TYPE_CRON,
         self::TYPE_NGINX,
+        self::TYPE_PHP,
     ];
 
     /**

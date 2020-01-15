@@ -32,6 +32,7 @@ use Syrma\ConfigGenerator\Generator\HeaderGenerator\BlockCommentBaseHeaderGenera
 use Syrma\ConfigGenerator\Generator\HeaderGenerator\HashTagBaseHeaderGenerator;
 use Syrma\ConfigGenerator\Generator\HeaderGenerator\HeaderGenerator;
 use Syrma\ConfigGenerator\Generator\HeaderGenerator\IniHeaderGenerator;
+use Syrma\ConfigGenerator\Generator\HeaderGenerator\PhpHeaderGenerator;
 use Syrma\ConfigGenerator\Generator\HeaderGenerator\XmlHeaderGenerator;
 use Syrma\ConfigGenerator\Generator\Processor\CronPostProcessor;
 use Syrma\ConfigGenerator\Generator\Processor\PostProcessorChain;
@@ -127,6 +128,7 @@ return static function (ContainerConfigurator $configurator) {
         ->arg(1, inline(HashTagBaseHeaderGenerator::class))
         ->arg(2, inline(IniHeaderGenerator::class))
         ->arg(3, inline(XmlHeaderGenerator::class))
+        ->arg(4, inline(PhpHeaderGenerator::class))
     ;
 
     $services->set('generator.processor.post_processor.chain', PostProcessorChain::class)

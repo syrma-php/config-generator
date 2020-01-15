@@ -5,6 +5,7 @@ CHANGELOG
 -------------------
 * [fix] The YamlConfigFileLoader not resolve the `defaults.parameterFiles` values
 * [fix] The YamlConfigFileLoader throw error if the config file is empty
+* [add] New config file type: `php`
 
 0.9.1  (2020-01-14)
 -------------------
